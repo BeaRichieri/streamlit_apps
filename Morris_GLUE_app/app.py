@@ -1,5 +1,6 @@
 import streamlit as st
 import os
+from pathlib import Path
 
 def _navigate_to(path: str):
     """Change page and scroll to the top on next render."""
@@ -10,7 +11,20 @@ def _navigate_to(path: str):
     st.rerun()
 
 # --- Application parameters ---
-DEFAULT_START_PAGE = "C:/Users/beatr/Documents/Eurokarst2026/Course/Morris_GLUE_app/content/start.py"
+# Change ONLY this line:
+# True  = running locally
+# False = running from GitHub / Streamlit Cloud
+RUNNING_LOCAL = False
+
+if RUNNING_LOCAL:
+    BASE_DIR = Path("C:/Users/beatr/Documents/Eurokarst2026/Course/Morris_GLUE_app")
+else:
+    BASE_DIR = Path(__file__).resolve().parent
+
+CONTENT_DIR = BASE_DIR / "content"
+ASSETS_DIR = BASE_DIR / "assets"
+
+DEFAULT_START_PAGE = CONTENT_DIR / "start.py"
 
 
 # --- MUST be first: layout setup wide / centered ---
@@ -113,10 +127,10 @@ st.markdown(
 )
 # --- Flat page definitions ---
 pages = {
-    "Welcome": "C:/Users/beatr/Documents/Eurokarst2026/Course/Morris_GLUE_app/content/start.py",
-    "📊 Introduction to sensitivity analysis": "C:/Users/beatr/Documents/Eurokarst2026/Course/Morris_GLUE_app/content/sensitivity_analysis.py",
-    "🎲 Introduction to parameter uncertainty": "C:/Users/beatr/Documents/Eurokarst2026/Course/Morris_GLUE_app/content/parameter_uncertainty.py",
-    "ℹ️ About": "C:/Users/beatr/Documents/Eurokarst2026/Course/Morris_GLUE_app/content/about.py"
+    "Welcome": CONTENT_DIR / "start.py",
+    "📊 Introduction to sensitivity analysis": CONTENT_DIR / "sensitivity_analysis.py",
+    "🎲 Introduction to parameter uncertainty": CONTENT_DIR / "parameter_uncertainty.py",
+    "ℹ️ About": CONTENT_DIR / "about.py"
 }
 
 # --- State tracking ---
