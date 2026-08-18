@@ -1,0 +1,1 @@
+The short diagnostic assessment is intended to reveal which concepts are already familiar before you start the section. Try answering from your current understanding and return to the questions later if useful.
