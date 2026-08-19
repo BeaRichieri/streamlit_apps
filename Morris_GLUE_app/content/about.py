@@ -105,4 +105,4 @@ with columns_lic[0]:
     )
 
 with columns_lic[1]:
-    st.image(IMAGE_DIR"CC_BY-SA_icon.png")
+    st.image(IMAGE_DIR/"CC_BY-SA_icon.png")
