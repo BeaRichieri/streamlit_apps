@@ -6,7 +6,7 @@ from app_utils import load_md, render_toggle_container
 # Fixed language and file locations
 # -----------------------------------------------------------------------------
 LANGUAGE = "en"
-MD_DIR = Path("Morris_GLUE_app/md")
+#MD_DIR = Path("Morris_GLUE_app/md")
 
 st.session_state.language = LANGUAGE
 
@@ -51,6 +51,7 @@ with columns_lic[0]:
     st.image('Morris_GLUE_app/assets/images/eurokarst2026_black.png')
 with columns_lic[2]:
     st.image('Morris_GLUE_app/assets/images/fau-logo.jpg')
+    st.image(MD_DIR / "fau-logo.jpg")
     
     
 # -----------------------------------------------------------------------------
