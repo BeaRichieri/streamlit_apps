@@ -15,14 +15,14 @@ QUESTIONS_DIR = st.session_state.QUESTIONS_DIR
 
 st.session_state.language = LANGUAGE
 
-# ---------- Track the current page
-PAGE_ID = "ABOUT"
+---------- Track the current page
+# PAGE_ID = "ABOUT"
 
-# Do (optional) things/settings if the user comes from another page
-if "current_page" not in st.session_state:
-    st.session_state.current_page = PAGE_ID
-if st.session_state.current_page != PAGE_ID:
-    st.session_state.current_page = PAGE_ID
+#Do (optional) things/settings if the user comes from another page
+# if "current_page" not in st.session_state:
+    # st.session_state.current_page = PAGE_ID
+# if st.session_state.current_page != PAGE_ID:
+    # st.session_state.current_page = PAGE_ID
     
 # ---------- Start the page with scrolling here
 if st.session_state.scroll_to_top:
