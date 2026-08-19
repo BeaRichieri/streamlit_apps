@@ -20,7 +20,7 @@ if "directories_initialized" not in st.session_state:
     st.session_state.CONTENT_DIR = BASE_DIR / "content"
     st.session_state.ASSETS_DIR = BASE_DIR / "assets"
     st.session_state.IMAGE_DIR = BASE_DIR / "assets/images"
-    st.session_state.QUESTIONS_DIR = BASE_DIR / "questions"
+    st.session_state.QUESTIONS_DIR = QUESTIONS_DIR / "questions"
     
     
     st.session_state.directories_initialized = True
