@@ -637,7 +637,7 @@ st.subheader("❓ :blue[Check your understanding]", divider="blue")
 st.markdown(load_md(MD_DIR, "md_uncertainty_20.md", LANGUAGE))
 
 with st.expander("🧠 Show the self-assessment"):
-    render_assessment(ASSESSMENT_FILE)
+    render_assessment(QUESTIONS_DIR/"parameter_uncertainty_ass.json")
 
 
 # -----------------------------------------------------------------------------
