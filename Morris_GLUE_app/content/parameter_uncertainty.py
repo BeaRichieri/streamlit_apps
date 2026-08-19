@@ -38,8 +38,12 @@ institution_text = " | ".join(institution_list)
 # Fixed language and file locations
 # -----------------------------------------------------------------------------
 LANGUAGE = "en"
-MD_DIR = Path("md")
-ASSESSMENT_FILE = Path("questions") / "parameter_uncertainty_ass.json"
+
+BASE_DIR = st.session_state.BASE_DIR
+CONTENT_DIR = st.session_state.CONTENT_DIR
+ASSETS_DIR = st.session_state.ASSETS_DIR
+IMAGE_DIR = st.session_state.IMAGE_DIR
+MD_DIR = st.session_state.MD_DIR
 
 st.session_state.language = LANGUAGE
 
@@ -534,8 +538,8 @@ st.info(load_md(MD_DIR, "md_uncertainty_07.md", LANGUAGE))
 st.subheader(":blue[What is parameter uncertainty?]", divider="blue")
 col1, col2, col3 = st.columns([1, 20, 1])
 with col2:
-    st.image(
-        "assets/images/ensamble_1.png",
+    st.image(IMAGE_DIR /
+        "ensamble_1.png",
        # caption="General workflow of a conceptual hydrological model",
         use_container_width=True,
     )
@@ -578,8 +582,8 @@ st.markdown(load_md(MD_DIR, "md_uncertainty_13.md", LANGUAGE))
 
 col1, col2, col3 = st.columns([1, 20, 1])
 with col2:
-    st.image(
-        "assets/images/GLUE.png",
+    st.image(IMAGE_DIR /
+        "GLUE.png",
        # caption="General workflow of a conceptual hydrological model",
         use_container_width=True,
     )
@@ -662,4 +666,4 @@ with columns_lic[0]:
     )
 
 with columns_lic[1]:
-    st.image("assets/images/CC_BY-SA_icon.png")
+    st.image(IMAGE_DIR /"CC_BY-SA_icon.png")

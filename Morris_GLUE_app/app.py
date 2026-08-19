@@ -9,20 +9,12 @@ def _navigate_to(path: str):
         st.session_state.scroll_to_top = True    
         st.session_state.prev_path = path
     st.rerun()
-
-# --- Application parameters ---
-# Change ONLY this line:
-# True  = running locally
-# False = running from GitHub / Streamlit Cloud
-#RUNNING_LOCAL = False
-#
-#if RUNNING_LOCAL:
-#    BASE_DIR = Path("C:/Users/beatr/Documents/Eurokarst2026/Course/Morris_GLUE_app")
-#else:
-#    BASE_DIR = Path(__file__).resolve().parent
     
 if "directories_initialized" not in st.session_state:
     BASE_DIR = Path("Morris_GLUE_app")
+  
+    #if RUNNING_LOCAL:
+    #BASE_DIR = Path("C:/Users/beatr/Documents/Eurokarst2026/Course/Morris_GLUE_app")
     
     st.session_state.BASE_DIR = BASE_DIR
     st.session_state.CONTENT_DIR = BASE_DIR / "content"

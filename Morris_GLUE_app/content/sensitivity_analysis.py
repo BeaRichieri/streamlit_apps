@@ -37,12 +37,14 @@ institution_text = " | ".join(institution_list)
 # Fixed language and file locations
 # -----------------------------------------------------------------------------
 LANGUAGE = "en"
-MD_DIR = Path("md")
-PRE_ASSESSMENT_FILE = Path("questions") / "sensitivity_intro_pre_ass.json"
-MORRIS_ASSESSMENT_FILE = Path("questions") / "sensitivity_morris_ass.json"
+
+BASE_DIR = st.session_state.BASE_DIR
+CONTENT_DIR = st.session_state.CONTENT_DIR
+ASSETS_DIR = st.session_state.ASSETS_DIR
+IMAGE_DIR = st.session_state.IMAGE_DIR
+MD_DIR = st.session_state.MD_DIR
 
 st.session_state.language = LANGUAGE
-
 
 # -----------------------------------------------------------------------------
 # Assessment renderer: established iNUX / streamlit-book JSON structure
@@ -1055,8 +1057,8 @@ st.markdown(load_md(MD_DIR, "md_sensitivity_04.md", LANGUAGE))
         
 col1, col2, col3 = st.columns([1, 20, 1])
 with col2:
-    st.image(
-        "assets/images/forward_inverse_modeling.png",
+    st.image(IMAGE_DIR / 
+        "forward_inverse_modeling.png",
         caption="Forward and inverse modelling.",
         use_container_width=True,
     )
@@ -1378,4 +1380,4 @@ with columns_lic[0]:
     )
 
 with columns_lic[1]:
-    st.image("assets/images/CC_BY-SA_icon.png")
+    st.image(IMAGE_DIR / "CC_BY-SA_icon.png")
