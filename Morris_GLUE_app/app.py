@@ -25,8 +25,8 @@ BASE_DIR = Path("Morris_GLUE_app")
 
 CONTENT_DIR = BASE_DIR / "content"
 ASSETS_DIR = BASE_DIR / "assets"
-IMAGE_DIR = BASE_DIR / "assets/images"
-MD_DIR = BASE_DIR / "md"
+st.session_state.IMAGE_DIR = BASE_DIR / "assets/images"
+st.session_state.MD_DIR = BASE_DIR / "md"
 
 DEFAULT_START_PAGE = CONTENT_DIR / "start.py"
 
