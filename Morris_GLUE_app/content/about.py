@@ -15,7 +15,7 @@ QUESTIONS_DIR = st.session_state.QUESTIONS_DIR
 
 st.session_state.language = LANGUAGE
 
----------- Track the current page
+#---------- Track the current page
 # PAGE_ID = "ABOUT"
 
 #Do (optional) things/settings if the user comes from another page
