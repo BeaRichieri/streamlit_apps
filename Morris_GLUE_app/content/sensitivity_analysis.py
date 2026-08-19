@@ -43,6 +43,7 @@ CONTENT_DIR = st.session_state.CONTENT_DIR
 ASSETS_DIR = st.session_state.ASSETS_DIR
 IMAGE_DIR = st.session_state.IMAGE_DIR
 MD_DIR = st.session_state.MD_DIR
+QUESTIONS_DIR = st.session_state.QUESTIONS_DIR
 
 st.session_state.language = LANGUAGE
 
@@ -1002,7 +1003,7 @@ st.markdown(load_md(MD_DIR, "md_sensitivity_03.md", LANGUAGE))
 render_toggle_container(
     "sensitivity_intro_pre_assessment",
     "🧠 **Show the diagnostic assessment**",
-    lambda: render_assessment(PRE_ASSESSMENT_FILE),
+    lambda: render_assessment(QUESTIONS_DIR / "sensitivity_intro_pre_ass.json"),
     default_open=False,
 )
 
@@ -1283,7 +1284,7 @@ Use these questions to check whether you understood the main ideas of the
 Morris method before completing this section.
 """
     )
-    render_assessment(MORRIS_ASSESSMENT_FILE)
+    render_assessment(QUESTIONS_DIR/"sensitivity_morris_ass.json")
 
 
 # -----------------------------------------------------------------------------
