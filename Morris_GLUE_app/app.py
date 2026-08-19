@@ -14,12 +14,14 @@ def _navigate_to(path: str):
 # Change ONLY this line:
 # True  = running locally
 # False = running from GitHub / Streamlit Cloud
-RUNNING_LOCAL = False
-
-if RUNNING_LOCAL:
-    BASE_DIR = Path("C:/Users/beatr/Documents/Eurokarst2026/Course/Morris_GLUE_app")
-else:
-    BASE_DIR = Path(__file__).resolve().parent
+#RUNNING_LOCAL = False
+#
+#if RUNNING_LOCAL:
+#    BASE_DIR = Path("C:/Users/beatr/Documents/Eurokarst2026/Course/Morris_GLUE_app")
+#else:
+#    BASE_DIR = Path(__file__).resolve().parent
+    
+BASE_DIR = Path("Morris_GLUE_app")
 
 CONTENT_DIR = BASE_DIR / "content"
 ASSETS_DIR = BASE_DIR / "assets"
