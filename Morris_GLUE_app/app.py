@@ -22,7 +22,9 @@ def _navigate_to(path: str):
 #    BASE_DIR = Path(__file__).resolve().parent
     
 if "directories_initialized" not in st.session_state:
-    st.session_state.BASE_DIR = Path("Morris_GLUE_app")
+    BASE_DIR = Path("Morris_GLUE_app")
+    
+    st.session_state.BASE_DIR = BASE_DIR
     st.session_state.CONTENT_DIR = BASE_DIR / "content"
     st.session_state.ASSETS_DIR = BASE_DIR / "assets"
     st.session_state.IMAGE_DIR = BASE_DIR / "assets/images"
