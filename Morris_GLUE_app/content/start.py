@@ -48,9 +48,9 @@ st.write("")
 # Render footer with logos
 columns_lic = st.columns((1,1,1))
 with columns_lic[0]:
-    st.image('assets/images/eurokarst2026_black.png')
+    st.image('Morris_GLUE_app/assets/images/eurokarst2026_black.png')
 with columns_lic[2]:
-    st.image('assets/images/fau-logo.jpg')
+    st.image('Morris_GLUE_app/assets/images/fau-logo.jpg')
     
     
 # -----------------------------------------------------------------------------
@@ -66,4 +66,4 @@ with columns_lic[0]:
     )
 
 with columns_lic[1]:
-    st.image("assets/images/CC_BY-SA_icon.png")
+    st.image("Morris_GLUE_app/assets/images/CC_BY-SA_icon.png")
