@@ -20,7 +20,7 @@ if "directories_initialized" not in st.session_state:
     st.session_state.CONTENT_DIR = BASE_DIR / "content"
     st.session_state.ASSETS_DIR = BASE_DIR / "assets"
     st.session_state.IMAGE_DIR = BASE_DIR / "assets/images"
-    #st.session_state.QUESTIONS_DIR = BASE_DIR / "questions"
+    st.session_state.QUESTIONS_DIR = BASE_DIR / "questions"
     
     
     st.session_state.directories_initialized = True
@@ -31,7 +31,7 @@ CONTENT_DIR = st.session_state.CONTENT_DIR
 ASSETS_DIR = st.session_state.ASSETS_DIR
 IMAGE_DIR = st.session_state.IMAGE_DIR
 MD_DIR = st.session_state.MD_DIR
-#QUESTIONS_DIR = st.session_state.QUESTIONS_DIR
+QUESTIONS_DIR = st.session_state.QUESTIONS_DIR
 
 DEFAULT_START_PAGE = CONTENT_DIR / "start.py"
 
