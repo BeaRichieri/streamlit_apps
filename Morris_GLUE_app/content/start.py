@@ -6,7 +6,7 @@ from app_utils import load_md, render_toggle_container
 # Fixed language and file locations
 # -----------------------------------------------------------------------------
 LANGUAGE = "en"
-MD_DIR = Path("md")
+MD_DIR = Path("Morris_GLUE_app/assets/md")
 
 st.session_state.language = LANGUAGE
 
