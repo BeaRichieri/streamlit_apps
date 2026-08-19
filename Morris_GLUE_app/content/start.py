@@ -12,7 +12,7 @@ CONTENT_DIR = st.session_state.CONTENT_DIR
 ASSETS_DIR = st.session_state.ASSETS_DIR
 IMAGE_DIR = st.session_state.IMAGE_DIR
 MD_DIR = st.session_state.MD_DIR
-#QUESTIONS_DIR = st.session_state.QUESTIONS_DIR
+QUESTIONS_DIR = st.session_state.QUESTIONS_DIR
 
 st.session_state.language = LANGUAGE
 
