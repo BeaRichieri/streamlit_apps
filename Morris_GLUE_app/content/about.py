@@ -1,6 +1,20 @@
 import streamlit as st
 from streamlit_scroll_to_top import scroll_to_here
 
+# -----------------------------------------------------------------------------
+# Fixed language and file locations
+# -----------------------------------------------------------------------------
+LANGUAGE = "en"
+
+BASE_DIR = st.session_state.BASE_DIR
+CONTENT_DIR = st.session_state.CONTENT_DIR
+ASSETS_DIR = st.session_state.ASSETS_DIR
+IMAGE_DIR = st.session_state.IMAGE_DIR
+MD_DIR = st.session_state.MD_DIR
+QUESTIONS_DIR = st.session_state.QUESTIONS_DIR
+
+st.session_state.language = LANGUAGE
+
 # ---------- Track the current page
 PAGE_ID = "ABOUT"
 
@@ -73,9 +87,9 @@ st.markdown('---')
 # Render footer with logos
 columns_lic = st.columns((1,1,1))
 with columns_lic[0]:
-    st.image('assets/images/eurokarst2026_black.png')
+    st.image(IMAGE_DIR/"eurokarst2026_black.png")
 with columns_lic[2]:
-    st.image('assets/images/fau-logo.jpg')
+    st.image(IMAGE_DIR/"fau-logo.jpg")
     
     
 # -----------------------------------------------------------------------------
@@ -91,4 +105,4 @@ with columns_lic[0]:
     )
 
 with columns_lic[1]:
-    st.image("assets/images/CC_BY-SA_icon.png")
+    st.image(IMAGE_DIR"CC_BY-SA_icon.png")
