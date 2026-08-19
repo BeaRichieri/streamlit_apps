@@ -10,6 +10,7 @@ LANGUAGE = "en"
 BASE_DIR = st.session_state.BASE_DIR
 CONTENT_DIR = st.session_state.CONTENT_DIR
 ASSETS_DIR = st.session_state.ASSETS_DIR
+IMAGE_DIR = st.session_state.IMAGE_DIR
 MD_DIR = st.session_state.MD_DIR
 
 st.session_state.language = LANGUAGE
@@ -43,7 +44,7 @@ st.subheader("Introduction to sensitivity analysis and uncertainty analysis")
 
 st.write("")
 
-st.markdown(load_md(st.session_state.MD_DIR, "md_start_01.md", LANGUAGE))
+st.markdown(load_md(MD_DIR, "md_start_01.md", LANGUAGE))
 
 st.write("")
 st.write("")
@@ -55,7 +56,7 @@ with columns_lic[0]:
     st.image('Morris_GLUE_app/assets/images/eurokarst2026_black.png')
 with columns_lic[2]:
     st.image('Morris_GLUE_app/assets/images/fau-logo.jpg')
-    st.image(MD_DIR / "fau-logo.jpg")
+    st.image(IMAGE_DIR / "fau-logo.jpg")
     
     
 # -----------------------------------------------------------------------------

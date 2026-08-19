@@ -36,6 +36,7 @@ if "directories_initialized" not in st.session_state:
 BASE_DIR = st.session_state.BASE_DIR
 CONTENT_DIR = st.session_state.CONTENT_DIR
 ASSETS_DIR = st.session_state.ASSETS_DIR
+IMAGE_DIR = st.session_state.IMAGE_DIR
 MD_DIR = st.session_state.MD_DIR
 
 DEFAULT_START_PAGE = CONTENT_DIR / "start.py"
