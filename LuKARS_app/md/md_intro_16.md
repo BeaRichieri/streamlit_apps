@@ -1,0 +1,1 @@
+The simultaneous presence of matrix, fracture, and conduit domains produces the characteristic dual behaviour of karst aquifers.

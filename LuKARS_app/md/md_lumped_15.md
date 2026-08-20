@@ -1,0 +1,8 @@
+- Hydrological models are simplified representations of real hydrological systems.
+- Distributed models explicitly represent spatial variability, whereas conceptual models describe dominant processes through storages and transfer functions.
+- Fully lumped models treat the catchment as one spatial unit.
+- Semi-distributed models divide the catchment into hydrological response units.
+- Conceptual models are computationally efficient and useful when detailed spatial information is limited.
+- Their effective parameters generally need to be estimated through calibration and evaluated through validation.
+- Sensitivity analysis and uncertainty quantification are important because several parameter combinations may reproduce the observations similarly well.
+- LuKARS is a semi-distributed conceptual model based on hydrological response units called **hydrotopes**.

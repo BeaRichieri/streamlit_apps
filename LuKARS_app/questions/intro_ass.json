@@ -1,0 +1,112 @@
+[
+  {
+    "question": "Why are karst aquifers particularly important for society? (Select ONE correct answer.)",
+    "options": {
+      "They consistently remove contaminants before the water reaches springs or wells.": false,
+      "They supply drinking water to around one quarter of the world's population.": true,
+      "They are the only type of aquifer capable of storing freshwater.": false,
+      "They occur mainly in regions without permanent human settlements.": false
+    },
+    "success": "Correct. Karst aquifers are major freshwater resources and supply drinking water to a substantial share of the world's population.",
+    "error": "Not quite. Focus on the global importance of karst aquifers as sources of drinking water."
+  },
+  {
+    "question": "Which characteristics commonly make karst groundwater highly vulnerable to contamination? (Select ALL correct answers.)",
+    "options": {
+      "Thin or discontinuous soils may provide only limited protection.": true,
+      "Long residence times in a homogeneous porous matrix ensure complete filtration.": false,
+      "Concentrated recharge through sinkholes or swallow holes can bypass much of the soil zone.": true,
+      "Rapid flow through connected fractures and conduits can limit attenuation and reaction time.": true
+    },
+    "success": "Correct. Limited soil protection, concentrated recharge, and rapid preferential flow can transport contaminants into and through karst aquifers quickly.",
+    "error": "Not quite. Consider both the limited protection at the land surface and the rapid pathways through which recharge can enter and cross the aquifer."
+  },
+  {
+    "question": "Why does carbon dioxide increase the dissolution of carbonate rocks? (Select ONE correct answer.)",
+    "options": {
+      "It raises the pH of the water and therefore accelerates calcite dissolution.": false,
+      "It removes dissolved oxygen, which mechanically widens fractures.": false,
+      "It reacts with water to form carbonic acid, increasing the water's capacity to dissolve carbonate minerals.": true,
+      "It coats carbonate surfaces with an impermeable mineral layer.": false
+    },
+    "success": "Correct. Dissolved carbon dioxide forms carbonic acid, which promotes the dissolution of carbonate minerals such as calcite and dolomite.",
+    "error": "Not quite. Think about the weak acid formed when carbon dioxide dissolves in water."
+  },
+  {
+    "question": "Which sequence correctly describes the positive feedback involved in karst conduit development? (Select ONE correct answer.)",
+    "options": {
+      "Fracture enlargement → reduced flow → reduced dissolution → rapid conduit formation": false,
+      "Fracture narrowing → increased flow → increased dissolution → fracture closure": false,
+      "Fracture enlargement → increased flow → increased dissolution → further enlargement": true,
+      "Increased dissolution → reduced permeability → reduced flow → conduit expansion": false
+    },
+    "success": "Correct. As a fracture enlarges, it can carry more water; the increased flow can enhance dissolution and cause further enlargement.",
+    "error": "Not quite. Follow how an increase in fracture aperture affects water flow and how that altered flow affects subsequent dissolution."
+  },
+  {
+    "question": "Which void domains are included in the triple-porosity concept for karst aquifers? (Select ALL correct answers.)",
+    "options": {
+      "Dissolution-enlarged conduits": true,
+      "Surface channels carrying overland flow above the aquifer": false,
+      "Intergranular or rock-matrix pores": true,
+      "Tectonic fractures and bedding-plane discontinuities": true
+    },
+    "success": "Correct. Triple porosity refers to matrix pores, fractures, and dissolution-enlarged conduits, which differ strongly in storage and flow behaviour.",
+    "error": "Not quite. Identify the three groundwater-bearing void systems within the carbonate rock mass rather than features located at the land surface."
+  },
+  {
+    "question": "Which example represents allogenic recharge to a karst aquifer? (Select ONE correct answer.)",
+    "options": {
+      "Diffuse rainfall infiltrating directly across a carbonate outcrop": false,
+      "Groundwater discharging from the aquifer through a karst spring": false,
+      "Rainfall entering a fracture located entirely within the carbonate catchment": false,
+      "A stream originating on non-karst terrain and sinking into a swallow hole at the karst boundary": true
+    },
+    "success": "Correct. Allogenic recharge originates outside the karst area and subsequently enters the karst aquifer, often through a concentrated pathway.",
+    "error": "Not quite. Focus on where the water originates before it enters the carbonate aquifer."
+  },
+  {
+    "question": "Which are common hydrological functions of the epikarst? (Select ALL correct answers.)",
+    "options": {
+      "It can temporarily store infiltrating water.": true,
+      "It forms an impermeable seal that prevents recharge from reaching deeper parts of the aquifer.": false,
+      "It can redistribute recharge laterally and vertically.": true,
+      "It can regulate the timing and intensity of recharge reaching deeper aquifer compartments.": true
+    },
+    "success": "Correct. The epikarst can store and redistribute infiltrating water and can modulate its transfer to deeper parts of the karst aquifer.",
+    "error": "Not quite. Think of the epikarst as a shallow, weathered storage and redistribution zone rather than as a completely impermeable barrier."
+  },
+  {
+    "question": "Which statements generally describe the matrix and conduit domains of a karst aquifer? (Select ALL correct answers.)",
+    "options": {
+      "The matrix generally provides relatively large storage and slow groundwater movement.": true,
+      "Matrix and conduit domains have identical flow velocities and storage properties.": false,
+      "Conduits can transmit water rapidly toward springs or abstraction points.": true,
+      "Water and dissolved substances can exchange between conduits and the surrounding fractured matrix.": true
+    },
+    "success": "Correct. The matrix is commonly associated with slower flow and greater storage, whereas conduits provide rapid transport; exchange between these domains is also possible.",
+    "error": "Not quite. Compare the domains in terms of storage, flow velocity, and possible exchange between fast and slow pathways."
+  },
+  {
+    "question": "Which responses are typical during and after an intense precipitation event in a karst catchment? (Select ALL correct answers.)",
+    "options": {
+      "Karst spring discharge may rise rapidly because recharge is transmitted through conduits.": true,
+      "All event water is stored permanently in the epikarst, so no rapid spring response occurs.": false,
+      "Slower drainage from fractures and the rock matrix can sustain spring flow after the discharge peak.": true,
+      "Spring discharge normally remains constant because precipitation does not affect karst aquifers.": false
+    },
+    "success": "Correct. Conduit flow can produce a rapid event response, while slower drainage from fractures and the matrix can sustain discharge during the recession period.",
+    "error": "Not quite. Distinguish between the rapid response through conduits and the slower post-event release from less mobile storage domains."
+  },
+  {
+    "question": "Why can water quality remain impaired after a short contamination event in a karst aquifer? (Select ONE correct answer.)",
+    "options": {
+      "The spring stops discharging until every contaminant has disappeared from the aquifer.": false,
+      "Contaminated conduit water can enter the surrounding fractured matrix during high flow and be released gradually back into conduits later.": true,
+      "All contaminants are permanently retained in the soil before they reach the aquifer.": false,
+      "Rapid conduit flow always destroys dissolved contaminants within minutes.": false
+    },
+    "success": "Correct. Reversible exchange between conduits and the fractured matrix can turn a short contamination pulse into a prolonged water-quality problem.",
+    "error": "Not quite. Consider how contaminants may move temporarily from fast-flowing conduits into slower storage domains and return later."
+  }
+]

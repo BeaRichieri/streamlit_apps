@@ -1,0 +1,8 @@
+- LuKARS combines semi-distributed hydrotopes with conceptual matrix and conduit compartments.
+- Hydrotopes represent spatial variability in recharge and storage behaviour.
+- Water can follow slow and fast pathways from the hydrotopes into the bottom compartments.
+- Fast hydrotope flow is controlled by storage thresholds and hysteresis.
+- The matrix and conduit compartments can exchange water in both directions.
+- Spring discharge is assembled from the active lower-compartment fluxes.
+- Model parameters should be interpreted through their effects on hydrological behaviour.
+- Internal storages and fluxes should be evaluated together with the simulated spring hydrograph.

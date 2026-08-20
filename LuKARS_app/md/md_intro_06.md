@@ -1,0 +1,1 @@
+Karst systems develop through the weathering and **dissolution of water-soluble rocks**. They are most commonly associated with carbonate rocks, particularly limestone and dolostone.
