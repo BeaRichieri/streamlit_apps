@@ -1,8 +1,8 @@
 """LuKARS 3.0 teaching implementation adapted from LuKARS3.0_Baget.ipynb.
 
-The equations and units follow the uploaded notebook. A small indexing issue in the
-notebook's Q_up loop is corrected here by iterating to n-2, because the routine
-writes state values at i+1.
+The equations and units follow the uploaded notebook. The lower-compartment
+implementation includes numerical safeguards for threshold handling, nonlinear
+coefficient evaluation, time-step consistency, and flux bookkeeping.
 """
 from __future__ import annotations
 
@@ -40,101 +40,343 @@ def q_up(dt, sns, e0, qis0, area, kis, qhy0, emin, emax, alpha, khy, lhy):
 
 @njit(cache=True)
 def ki_seuil(k, a, h, h_threshold):
-    return max(k * (h - h_threshold) ** (a - 1.0), 0.0)
+    """Return the effective linear coefficient used for a power-law flux.
+
+    The original expression is k * (h-h_threshold)**(a-1).  Evaluating this
+    directly at a zero head difference can generate infinities when a < 1 and
+    0**negative is encountered.  LuKARS teaching parameter ranges normally use
+    a >= 1; the explicit guards below keep the routine finite at the boundary.
+    """
+    if k <= 0.0:
+        return 0.0
+
+    dh = h - h_threshold
+    if dh <= 0.0:
+        # For a linear reservoir (a = 1), the effective coefficient is k even
+        # at zero storage.  For nonlinear exponents, the resulting flux is zero
+        # at the threshold and a zero effective coefficient is numerically safe.
+        if abs(a - 1.0) <= 1e-12:
+            return k
+        return 0.0
+
+    value = k * dh ** (a - 1.0)
+    if not np.isfinite(value) or value < 0.0:
+        return 0.0
+    return value
 
 
 @njit(cache=True)
 def eth(e, k, source, step, emin):
-    if k != 0.0:
+    """Exact update for one linearized reservoir over ``step`` time units."""
+    if step <= 0.0:
+        return max(e, emin)
+    if k > 1e-15:
         eq = source / k
         return max(eq + (e - eq) * np.exp(-k * step), emin)
     return max(e + step * source, emin)
 
 
 @njit(cache=True)
-def mcth(m, c, kmc, km, kc, sm, sc, step):
-    if km == 0.0 and kc == 0.0:
-        if kmc == 0.0:
-            return m, c
-        mth = (m+c)/2 + (sm+sc)*step/2 + (sm-sc)/(4*kmc) + 0.5*(m-c-(sm-sc)/(2*kmc))*np.exp(-2*kmc*step)
-        cth = (m+c)/2 + (sm+sc)*step/2 - (sm-sc)/(4*kmc) - 0.5*(m-c-(sm-sc)/(2*kmc))*np.exp(-2*kmc*step)
-        return max(mth, 0.0), max(cth, 0.0)
-
-    km, kc, kmc = -km, -kc, -kmc
-    f1 = np.sqrt((kmc + (kc+km)/2) ** 2 - (km*kmc + kc*kmc + kc*km))
-    l1 = -(kmc + (kc+km)/2) - f1
-    l2 = -(kmc + (kc+km)/2) + f1
-    det = kmc*kmc - (l1+kmc+km)*(l2+kmc+kc)
-    if abs(det) < 1e-15:
-        return max(m + sm*step, 0.0), max(c + sc*step, 0.0)
-    inv = 1.0 / det
-    k100, k101 = inv*kmc, inv*(-l2-kmc-kc)
-    k110, k111 = inv*(-l1-kmc-km), inv*kmc
-    w00, w01 = k100*m + k101*c, k110*m + k111*c
-    weq0, weq1 = (k100*sm+k101*sc)/l1, (k110*sm+k111*sc)/l2
-    wp0 = weq0 + (w00-weq0)*np.exp(-l1*step)
-    wp1 = weq1 + (w01-weq1)*np.exp(-l2*step)
-    return max(kmc*wp0 + (l2+kmc+kc)*wp1, 0.0), max((l1+kmc+km)*wp0 + kmc*wp1, 0.0)
+def _mcth_implicit_fallback(m, c, kmc, km, kc, sm, sc, step):
+    """Stable backward-Euler fallback for the two-reservoir linear system."""
+    a11 = 1.0 + step * (km + kmc)
+    a12 = -step * kmc
+    a21 = -step * kmc
+    a22 = 1.0 + step * (kc + kmc)
+    rhs1 = m + step * sm
+    rhs2 = c + step * sc
+    det = a11 * a22 - a12 * a21
+    if abs(det) <= 1e-18:
+        return max(m, 0.0), max(c, 0.0)
+    m_next = (rhs1 * a22 - a12 * rhs2) / det
+    c_next = (a11 * rhs2 - a21 * rhs1) / det
+    return max(m_next, 0.0), max(c_next, 0.0)
 
 
 @njit(cache=True)
-def q_bot(dt, qis, qhy, total_area, m0, c0, kmc, amc, c_loss, m_loss, kms, ams, kcs, acs):
+def mcth(m, c, kmc, km, kc, sm, sc, step):
+    """Advance matrix and conduit storages for frozen effective coefficients.
+
+    This keeps the analytical LuKARS/KarstMod update, but explicitly handles
+    the decoupled case and near-singular eigenvalue cases.  Those cases were
+    previously able to create divisions by zero or discontinuous fallbacks.
+    """
+    if step <= 0.0:
+        return max(m, 0.0), max(c, 0.0)
+
+    # With no matrix-conduit exchange the two compartments are independent.
+    # Handling this explicitly also covers M == C, where the effective kmc can
+    # be exactly zero even when the parameter kMC itself is non-zero.
+    if kmc <= 1e-15:
+        return (
+            eth(m, km, sm, step, 0.0),
+            eth(c, kc, sc, step, 0.0),
+        )
+
+    # Special exact solution when there is exchange but no spring drainage.
+    if km <= 1e-15 and kc <= 1e-15:
+        mth = (
+            (m + c) / 2.0
+            + (sm + sc) * step / 2.0
+            + (sm - sc) / (4.0 * kmc)
+            + 0.5
+            * (m - c - (sm - sc) / (2.0 * kmc))
+            * np.exp(-2.0 * kmc * step)
+        )
+        cth = (
+            (m + c) / 2.0
+            + (sm + sc) * step / 2.0
+            - (sm - sc) / (4.0 * kmc)
+            - 0.5
+            * (m - c - (sm - sc) / (2.0 * kmc))
+            * np.exp(-2.0 * kmc * step)
+        )
+        return max(mth, 0.0), max(cth, 0.0)
+
+    # Preserve positive physical coefficients for the stable fallback below.
+    km_pos = km
+    kc_pos = kc
+    kmc_pos = kmc
+
+    # Original analytical formulation uses the negative system coefficients.
+    km = -km
+    kc = -kc
+    kmc = -kmc
+
+    radicand = (
+        (kmc + (kc + km) / 2.0) ** 2
+        - (km * kmc + kc * kmc + kc * km)
+    )
+    # Tiny negative values can arise from roundoff although the physical
+    # two-reservoir system has real eigenvalues.
+    if radicand < 0.0:
+        if radicand > -1e-14:
+            radicand = 0.0
+        else:
+            return _mcth_implicit_fallback(
+                m, c, kmc_pos, km_pos, kc_pos, sm, sc, step
+            )
+
+    f1 = np.sqrt(radicand)
+    l1 = -(kmc + (kc + km) / 2.0) - f1
+    l2 = -(kmc + (kc + km) / 2.0) + f1
+
+    # Avoid divisions by an eigenvalue that is numerically zero.
+    if abs(l1) <= 1e-14 or abs(l2) <= 1e-14:
+        return _mcth_implicit_fallback(
+            m, c, kmc_pos, km_pos, kc_pos, sm, sc, step
+        )
+
+    det = kmc * kmc - (l1 + kmc + km) * (l2 + kmc + kc)
+    if abs(det) <= 1e-14:
+        return _mcth_implicit_fallback(
+            m, c, kmc_pos, km_pos, kc_pos, sm, sc, step
+        )
+
+    inv = 1.0 / det
+    k100 = inv * kmc
+    k101 = inv * (-l2 - kmc - kc)
+    k110 = inv * (-l1 - kmc - km)
+    k111 = inv * kmc
+
+    w00 = k100 * m + k101 * c
+    w01 = k110 * m + k111 * c
+    weq0 = (k100 * sm + k101 * sc) / l1
+    weq1 = (k110 * sm + k111 * sc) / l2
+
+    wp0 = weq0 + (w00 - weq0) * np.exp(-l1 * step)
+    wp1 = weq1 + (w01 - weq1) * np.exp(-l2 * step)
+
+    mth = kmc * wp0 + (l2 + kmc + kc) * wp1
+    cth = (l1 + kmc + km) * wp0 + kmc * wp1
+
+    if not np.isfinite(mth) or not np.isfinite(cth):
+        return _mcth_implicit_fallback(
+            m, c, kmc_pos, km_pos, kc_pos, sm, sc, step
+        )
+
+    return max(mth, 0.0), max(cth, 0.0)
+
+
+@njit(cache=True)
+def q_bot(
+    dt,
+    qis,
+    qhy,
+    total_area,
+    m0,
+    c0,
+    kmc,
+    amc,
+    c_loss,
+    m_loss,
+    kms,
+    ams,
+    kcs,
+    acs,
+):
+    """Run the lower LuKARS matrix/conduit compartments.
+
+    Numerical-stability changes relative to the teaching version:
+    * one unified midpoint update is used instead of switching branches when
+      M == C;
+    * the half step is dt/2 rather than a hard-coded 0.5;
+    * storage caps are applied immediately at t+1 and the overflow is recorded
+      as Q_loss in the same time step;
+    * spring fluxes are obtained from a dt-consistent mass balance and are
+      allocated using the midpoint outlet strengths;
+    * comparisons use tolerances rather than exact floating-point equality.
+    """
     n = qis.shape[0]
-    c = np.zeros(n); m = np.zeros(n)
-    q_c_loss = np.zeros(n); q_m_loss = np.zeros(n)
-    q_m_s = np.zeros(n); q_c_s = np.zeros(n); q_m_c = np.zeros(n); q_sim = np.zeros(n)
-    m[0], c[0] = m0, c0
-    qem = np.sum(qis, axis=1); qec = np.sum(qhy, axis=1)
-    # Preserved from the Baget notebook: matrix recharge is normalized by 70% of total area.
+    c = np.zeros(n, dtype=np.float64)
+    m = np.zeros(n, dtype=np.float64)
+    q_c_loss = np.zeros(n, dtype=np.float64)
+    q_m_loss = np.zeros(n, dtype=np.float64)
+    q_m_s = np.zeros(n, dtype=np.float64)
+    q_c_s = np.zeros(n, dtype=np.float64)
+    q_m_c = np.zeros(n, dtype=np.float64)
+    q_sim = np.zeros(n, dtype=np.float64)
+
+    if dt <= 0.0 or total_area <= 0.0:
+        return (
+            np.sum(qis, axis=1),
+            np.sum(qhy, axis=1),
+            q_c_loss,
+            q_m_loss,
+            q_m_s,
+            q_c_s,
+            q_m_c,
+            q_sim,
+            c,
+            m,
+        )
+
+    # Start inside the admissible storage range.  Any excess initial storage is
+    # treated as an immediate threshold loss at index 0.
+    m_initial = max(m0, 0.0)
+    c_initial = max(c0, 0.0)
+    if m_initial > m_loss:
+        q_m_loss[0] = (m_initial - m_loss) * total_area / dt
+        m_initial = m_loss
+    if c_initial > c_loss:
+        q_c_loss[0] = (c_initial - c_loss) * total_area / dt
+        c_initial = c_loss
+    m[0] = m_initial
+    c[0] = c_initial
+
+    qem = np.sum(qis, axis=1)
+    qec = np.sum(qhy, axis=1)
+
+    # Preserved from the Baget teaching implementation: matrix recharge is
+    # normalized by 70% of the total catchment area.
     sm = qem / (total_area * 0.7)
     sc = qec / total_area
 
-    for i in range(n - 1):
-        if kmc == 0.0 or m[i] == c[i]:
-            if c[i] > c_loss:
-                q_c_loss[i] = (c[i] - c_loss) * total_area / dt; c[i] = c_loss
-            if m[i] > m_loss:
-                q_m_loss[i] = (m[i] - m_loss) * total_area / dt; m[i] = m_loss
-            kmsi = ki_seuil(kms, ams, m[i], 0.0)
-            m12 = min(eth(m[i], kmsi, sm[i], 0.5, 0.0), m_loss)
-            kmsi = ki_seuil(kms, ams, m12, 0.0)
-            m[i+1] = min(eth(m[i], kmsi, sm[i], dt, 0.0), m_loss)
-            q_m_s[i+1] = max(sm[i] + (m[i]-m[i+1])/dt, 0.0)
-            kcsi = ki_seuil(kcs, acs, c[i], 0.0)
-            c12 = min(eth(c[i], kcsi, sc[i], 0.5, 0.0), c_loss)
-            kcsi = ki_seuil(kcs, acs, c12, 0.0)
-            c[i+1] = min(eth(c[i], kcsi, sc[i], dt, 0.0), c_loss)
-            q_c_s[i+1] = max(sc[i] + (c[i]-c[i+1])/dt, 0.0)
-        else:
-            if m[i] > m_loss:
-                q_m_loss[i] = (m[i]-m_loss)*total_area/dt; m[i] = m_loss
-            if c[i] > c_loss:
-                q_c_loss[i] = (c[i]-c_loss)*total_area/dt; c[i] = c_loss
-            kmsi = ki_seuil(kms, ams, m[i], 0.0)
-            kcsi = ki_seuil(kcs, acs, c[i], 0.0)
-            kmci = ki_seuil(kmc, amc, abs(m[i]-c[i]), 0.0)
-            m12, c12 = mcth(m[i], c[i], kmci, kmsi, kcsi, sm[i], sc[i], 0.5)
-            m12, c12 = min(m12, m_loss), min(c12, c_loss)
-            kmsi = ki_seuil(kms, ams, m12, 0.0)
-            kcsi = ki_seuil(kcs, acs, c12, 0.0)
-            kmci = ki_seuil(kmc, amc, abs(m12-c12), 0.0)
-            m[i+1], c[i+1] = mcth(m[i], c[i], kmci, kmsi, kcsi, sm[i], sc[i], dt)
-            qmscs = -(m[i+1]-m[i]) - (c[i+1]-c[i]) + sm[i] + sc[i]
-            denom = kmsi*(m[i]+m[i+1]) + kcsi*(c[i]+c[i+1])
-            if qmscs != 0.0 and denom != 0.0:
-                q_m_s[i+1] = qmscs * (kmsi*(m[i]+m[i+1])) / denom
-                q_c_s[i+1] = qmscs - q_m_s[i+1]
-            q_m_c[i+1] = (m[i]-m[i+1])/dt + sm[i] - q_m_s[i+1]
-        q_sim[i+1] = max(q_m_s[i+1] + q_c_s[i+1], 0.0)
+    eps = 1e-14
+    half_dt = 0.5 * dt
 
+    for i in range(n - 1):
+        # Effective coefficients at the beginning of the step.
+        kms_i = ki_seuil(kms, ams, m[i], 0.0)
+        kcs_i = ki_seuil(kcs, acs, c[i], 0.0)
+        kmc_i = ki_seuil(kmc, amc, abs(m[i] - c[i]), 0.0)
+
+        # Predictor to the middle of the time step.
+        m12, c12 = mcth(
+            m[i], c[i], kmc_i, kms_i, kcs_i, sm[i], sc[i], half_dt
+        )
+        m12 = min(max(m12, 0.0), m_loss)
+        c12 = min(max(c12, 0.0), c_loss)
+
+        # Re-evaluate nonlinear effective coefficients at the midpoint.
+        kms_12 = ki_seuil(kms, ams, m12, 0.0)
+        kcs_12 = ki_seuil(kcs, acs, c12, 0.0)
+        kmc_12 = ki_seuil(kmc, amc, abs(m12 - c12), 0.0)
+
+        # Corrector: integrate over the complete step using midpoint rates.
+        m_raw, c_raw = mcth(
+            m[i], c[i], kmc_12, kms_12, kcs_12, sm[i], sc[i], dt
+        )
+        m_raw = max(m_raw, 0.0)
+        c_raw = max(c_raw, 0.0)
+
+        # Apply threshold drainage immediately.  Keeping states inside their
+        # admissible range prevents a one-step overshoot/clip saw-tooth.
+        m_overflow = max(m_raw - m_loss, 0.0)
+        c_overflow = max(c_raw - c_loss, 0.0)
+        m[i + 1] = min(m_raw, m_loss)
+        c[i + 1] = min(c_raw, c_loss)
+
+        q_m_loss_depth = m_overflow / dt
+        q_c_loss_depth = c_overflow / dt
+        if m_overflow > 0.0:
+            q_m_loss[i + 1] = q_m_loss_depth * total_area
+        if c_overflow > 0.0:
+            q_c_loss[i + 1] = q_c_loss_depth * total_area
+
+        # Total spring drainage from mass conservation.  The original code
+        # omitted /dt here (harmless only when dt == 1) and did not subtract
+        # threshold losses, which could produce negative or zero spikes.
+        d_storage_dt = (
+            (m[i + 1] - m[i]) + (c[i + 1] - c[i])
+        ) / dt
+        spring_total = (
+            sm[i]
+            + sc[i]
+            - d_storage_dt
+            - q_m_loss_depth
+            - q_c_loss_depth
+        )
+        if spring_total < 0.0 and spring_total > -1e-12:
+            spring_total = 0.0
+        spring_total = max(spring_total, 0.0)
+
+        # Allocate the mass-balanced spring drainage between M and C using the
+        # midpoint outlet strengths.  This is stable even when one outlet is
+        # exactly zero (e.g. kMS = 0 in the Baget teaching parameter set).
+        weight_m = max(kms_12 * m12, 0.0)
+        weight_c = max(kcs_12 * c12, 0.0)
+        weight_sum = weight_m + weight_c
+        if spring_total > eps and weight_sum > eps:
+            q_m_s[i + 1] = spring_total * weight_m / weight_sum
+            q_c_s[i + 1] = spring_total - q_m_s[i + 1]
+        else:
+            q_m_s[i + 1] = 0.0
+            q_c_s[i + 1] = 0.0
+
+        # Matrix-to-conduit exchange from the matrix water balance.  Positive
+        # values mean M -> C; negative values mean C -> M.
+        q_m_c[i + 1] = (
+            sm[i]
+            - q_m_s[i + 1]
+            - q_m_loss_depth
+            - (m[i + 1] - m[i]) / dt
+        )
+
+        q_sim[i + 1] = q_m_s[i + 1] + q_c_s[i + 1]
+
+    # Unit conversion to m3/s.  Internal q_* arrays above are equivalent
+    # depth rates (mm/h), except q_*_loss which already contain mm*m2/h.
     dt_s = 3600.0
     q_c_loss = q_c_loss / dt_s / 1e3
     q_m_loss = q_m_loss / dt_s / 1e3
-    q_m_s = q_m_s * total_area / (1000.0*dt_s)
-    q_c_s = q_c_s * total_area / (1000.0*dt_s)
-    q_m_c = q_m_c * total_area / (1000.0*dt_s)
-    q_sim = q_sim * total_area / (1000.0*dt_s)
-    return qem, qec, q_c_loss, q_m_loss, q_m_s, q_c_s, q_m_c, q_sim, c, m
+    q_m_s = q_m_s * total_area / (1000.0 * dt_s)
+    q_c_s = q_c_s * total_area / (1000.0 * dt_s)
+    q_m_c = q_m_c * total_area / (1000.0 * dt_s)
+    q_sim = q_sim * total_area / (1000.0 * dt_s)
+
+    return (
+        qem,
+        qec,
+        q_c_loss,
+        q_m_loss,
+        q_m_s,
+        q_c_s,
+        q_m_c,
+        q_sim,
+        c,
+        m,
+    )
 
 
 def run_model(sns, params):
