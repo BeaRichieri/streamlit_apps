@@ -1,92 +1,70 @@
-#### Exercise 2 - Generation of fast flow
+## Exercise 2 — Fast hydrotope flow to the conduit
+
+### Goal
+Understand how the activation threshold and discharge coefficient control rapid recharge from a hydrotope to the conduit.
 
 ### Mechanism
-
-The fast-flow response is described by
+When fast flow is active, LuKARS uses
 
 $$
-Q_{\mathrm{hyd},i,t}
+Q_{\mathrm{hyd},i}
 =
-\varepsilon_{i,t}
+A_i\,\frac{k_{\mathrm{hyd},i}}{l_{\mathrm{hyd},i}}
 \left(
-\frac{\max(0,E_{i,t}-E_{\min,i})}
+\frac{E_i-E_{\min,i}}
 {E_{\max,i}-E_{\min,i}}
 \right)^{\alpha_i}
-\frac{k_{\mathrm{hyd},i}}{l_{\mathrm{hyd},i}}
-A_i
 $$
 
-The fast-flow parameters have **different physical roles**. Investigate them separately rather than changing them together.
+Fast flow starts when storage reaches $E_{\max}$ and, once active, remains active until storage falls below $E_{\min}$.
 
-Use **one hydrotope at a time** and reset to the reference values between the three experiments below.
+### Experiment A — Change the activation threshold
+Start from the reference simulation and work with **Hydrotope 1**.
 
-### A. Activation and deactivation — `Emin` and `Emax`
+1. Reference: `Emax = 142 mm`.
+2. Lower `Emax` to about `60 mm`.
+3. Inspect `Epikarst storage E1`, `Qhyd - Hydrotope 1`, `Conduit storage C`, `QCS`, and simulated spring discharge.
+4. Reset and then increase `Emax` to about `180 mm`.
 
-#### Predict
+### Question 1
+What happens to fast-flow activation when $E_{\max}$ is lowered?
 
-What should happen to the timing of fast flow if the activation/deactivation thresholds are shifted?
+:::answer Answer to question 1
+Fast flow can activate at a lower epikarst storage, so activation generally occurs earlier and/or more often. In addition, the denominator $E_{\max}-E_{\min}$ becomes smaller, which tends to increase the normalized storage term once fast flow is active.
+:::endanswer
 
-#### Experiment
+### Question 2
+Which part of the spring hydrograph is most likely to react to this change?
 
-1. Start from the **Reference** simulation.
-2. Change `Emax` for one hydrotope while keeping the other parameters fixed.
-3. Compare a lower and a higher `Emax`.
-4. Repeat for `Emin`.
+:::answer Answer to question 2
+The most visible effect is usually around recharge events and spring-discharge peaks, because $Q_{\mathrm{hyd}}$ feeds the rapidly responding conduit compartment directly.
+:::endanswer
 
-#### Inspect
+### Experiment B — Change the magnitude of fast flow
+Reset first.
 
-Focus on:
+1. Reference: `khyd ≈ 2730 m2/h` for Hydrotope 1.
+2. Increase it to about `6000 m2/h`.
+3. Then try a smaller value around `500 m2/h`.
+4. Keep all other parameters fixed.
 
-- epikarst storage $E$;
-- `Qhyd` of the selected hydrotope;
-- conduit storage;
-- `QCS`;
-- simulated spring peak.
+### Question 3
+How is changing `khyd` different from changing `Emax`?
 
-**Guiding question:** Which parameter mainly changes **when** fast flow becomes active and inactive?
+:::answer Answer to question 3
+$E_{\max}$ mainly controls **when** the fast pathway activates. $k_{\mathrm{hyd}}$ mainly scales **how much** rapid flow is produced once the pathway is active. Both can change spring peaks, but through different mechanisms.
+:::endanswer
 
----
+### Optional challenge — Nonlinearity
+Reset and reduce `alpha` from `1.98` to about `1.0`.
 
-### B. Shape of the fast response — `alpha`
+For normalized storage ratios between 0 and 1, what happens to the fast-flow term?
 
-#### Predict
+:::answer Optional challenge answer
+For $0<r<1$, reducing the exponent increases $r^{\alpha}$. Therefore a smaller $\alpha$ generally makes the fast-flow response stronger over that part of the storage range. This parameter controls the shape of the response rather than only a simple multiplicative scale.
+:::endanswer
 
-`alpha` is an exponent. Do you expect it to mainly shift the threshold, or to change how strongly `Qhyd` grows once the pathway is active?
+### Take-home message
+The fast pathway has both **activation controls** and **magnitude/shape controls**. Different parameters can therefore alter a spring peak for different physical reasons.
 
-#### Experiment
-
-1. Reset to the reference.
-2. Change only `alpha` for the selected hydrotope.
-3. Compare a lower and a higher value.
-
-#### Inspect
-
-Compare the shape of `Qhyd` during events and how that shape propagates into conduit storage, `QCS`, and the spring peak.
-
-**Guiding question:** Does `alpha` primarily affect activation timing or the **nonlinearity of the active fast-flow response**?
-
----
-
-### C. Magnitude of fast flow — `khyd`
-
-#### Predict
-
-Because `khyd` multiplies the active fast-flow term, what should happen to `Qhyd` when `khyd` increases?
-
-#### Experiment
-
-1. Reset to the reference.
-2. Change only `khyd`.
-3. Use the logarithmic slider to compare values separated enough to make the effect visible.
-
-#### Inspect
-
-Follow:
-
-**`khyd` → `Qhyd` → conduit storage → `QCS` → spring discharge**
-
-**Guiding question:** How is changing the **magnitude** of fast transfer different from changing its thresholds or nonlinearity?
-
-### Reset
-
-Return to the **Baget reference values** before starting Exercise 3.
+**Before continuing:** reset to the Baget reference values.

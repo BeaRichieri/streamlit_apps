@@ -142,19 +142,19 @@ def load_colored_md(filename: str) -> str:
 # -----------------------------------------------------------------------------
 TUTORIAL_EXERCISES = {
     "1": {
-        "tab": "1 · Slow pathway",
+        "tab": "1 · Slow infiltration",
         "file": "md_baget_tutorial_01.md",
     },
     "2": {
-        "tab": "2 · Fast pathway",
+        "tab": "2 · Fast hydrotope flow",
         "file": "md_baget_tutorial_02.md",
     },
     "3": {
-        "tab": "3 · Matrix-conduit",
+        "tab": "3 · Matrix ↔ conduit",
         "file": "md_baget_tutorial_03.md",
     },
     "4": {
-        "tab": "4 · Spring release",
+        "tab": "4 · Spring discharge",
         "file": "md_baget_tutorial_04.md",
     },
     "5": {
@@ -164,21 +164,11 @@ TUTORIAL_EXERCISES = {
 }
 
 
-def render_tutorial_exercise_file(
-    filename: Path,
-) -> None:
-    """Render one exercise from Markdown, with $$...$$ blocks via st.latex."""
-    exercise_text = filename.read_text(
-        encoding="utf-8"
-    )
-
-    # Keep each exercise entirely in its Markdown file, including equations.
-    # Display equations are delimited by $$ ... $$ and rendered with st.latex
-    # for reliable Streamlit formatting. All other Markdown is rendered
-    # normally, including inline $...$ mathematics.
+def _render_tutorial_markdown(markdown_text: str) -> None:
+    """Render tutorial Markdown and $$...$$ display equations."""
     parts = re.split(
         r"(\$\$.*?\$\$)",
-        exercise_text,
+        markdown_text,
         flags=re.DOTALL,
     )
 
@@ -188,16 +178,47 @@ def render_tutorial_exercise_file(
 
         stripped = part.strip()
 
-        if (
-            stripped.startswith("$$")
-            and stripped.endswith("$$")
-        ):
-            equation = stripped[2:-2].strip()
-            st.latex(equation)
+        if stripped.startswith("$$") and stripped.endswith("$$"):
+            st.latex(stripped[2:-2].strip())
         else:
-            st.markdown(
-                color_parameter_markdown(part)
-            )
+            st.markdown(color_parameter_markdown(part))
+
+
+def render_tutorial_exercise_file(
+    filename: Path,
+) -> None:
+    """Render one exercise, including optional answer expanders.
+
+    In the Markdown files an answer block is written as::
+
+        :::answer Answer to question 1
+        Answer text...
+        :::endanswer
+
+    Keeping the questions and answers in the Markdown files means the same
+    content is used in the Tutorial tab and in the standalone exercise view.
+    """
+    exercise_text = filename.read_text(encoding="utf-8")
+
+    answer_pattern = re.compile(
+        r":::answer(?:[ \t]+([^\n]+))?\n(.*?)\n:::endanswer",
+        flags=re.DOTALL,
+    )
+
+    position = 0
+
+    for match in answer_pattern.finditer(exercise_text):
+        _render_tutorial_markdown(exercise_text[position:match.start()])
+
+        title = (match.group(1) or "Show answer").strip()
+        answer_text = match.group(2).strip()
+
+        with st.expander(f"💡 {title}", expanded=False):
+            _render_tutorial_markdown(answer_text)
+
+        position = match.end()
+
+    _render_tutorial_markdown(exercise_text[position:])
 
 
 def tutorial_exercise_url(
@@ -2841,24 +2862,29 @@ $\\color{#4AA3FF}{C_{\\mathrm{loss}}}$
         )
 
         st.info(
-            "**Tutorial strategy:** follow the water through the model from the "
-            "hydrotopes to the spring. For every experiment: predict first, change "
-            "one mechanism at a time, inspect the internal fluxes/storages and "
-            "the spring hydrograph, and then reset to the Baget reference values."
+            "**How to use the tutorial:** each exercise follows the same sequence: "
+            "**reset → predict → change one parameter → inspect the relevant "
+            "fluxes/storages → answer the questions → reveal the answer**. "
+            "The goal is to understand the causal response of the model, not to "
+            "find the best calibration."
         )
 
         st.markdown(
             """
         **Before you start**
 
-        1. Click **Reset Baget parameters** so that everyone starts from the
-           same reference simulation.
-        2. In the Calibration tab, save this run with the note **Reference**.
-        3. Open the **live Internal fluxes**, **live Storages**, and/or
-           **live Discharge** plots when useful.
-        4. During these exercises, use NSE/KGE only as supporting information.
-           The main objective is to understand **why** the model response
-           changes.
+        1. Click **Reset Baget parameters** and save the run in the Calibration
+           tab with the note **Reference**.
+        2. Keep the parameter panel open in the main Baget page.
+        3. When an exercise asks you to inspect a graph, use **Open live plot**
+           if you want the graph in a second browser tab.
+        4. You can also use **Open exercise separately** in every tutorial tab.
+           This is useful when you want the instructions next to the controls.
+        5. Make your own prediction before opening a **Show answer** expander.
+
+        Unless an exercise explicitly says otherwise, change **only the stated
+        parameter** and reset to the reference values before moving to the next
+        experiment.
         """
         )
 
@@ -2878,18 +2904,14 @@ $\\color{#4AA3FF}{C_{\\mathrm{loss}}}$
             exercise_tabs,
         ):
             with exercise_tab:
-                exercise = TUTORIAL_EXERCISES[
-                    exercise_key
-                ]
+                exercise = TUTORIAL_EXERCISES[exercise_key]
+
+                # Put the pop-out control first so the exercise can immediately
+                # be moved next to the live parameter controls or graphs.
+                render_tutorial_popout_button(exercise_key)
 
                 render_tutorial_exercise_file(
                     MD_DIR / exercise["file"]
-                )
-
-                st.markdown("---")
-
-                render_tutorial_popout_button(
-                    exercise_key
                 )
 
 

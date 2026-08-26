@@ -1,55 +1,71 @@
-#### Exercise 5 - Conduit loss threshold
+## Exercise 5 — Conduit loss threshold
+
+### Goal
+Understand the threshold-controlled loss pathway and distinguish water discharged at the modeled spring from water removed from the conduit through $Q_{\mathrm{Closs}}$.
 
 ### Mechanism
-
 Conduit loss is activated only when conduit storage exceeds the threshold $C_{\mathrm{loss}}$:
 
 $$
-Q_{\mathrm{Closs},t}
+Q_{\mathrm{Closs}}
 =
 \begin{cases}
-\left(C_t-C_{\mathrm{loss}}\right)
-\dfrac{R_a}{\Delta t},
-& C_t>C_{\mathrm{loss}},\\[4pt]
-0,
-& C_t\leq C_{\mathrm{loss}}.
+(C-C_{\mathrm{loss}})\dfrac{A}{\Delta t}, & C>C_{\mathrm{loss}},\\
+0, & C\le C_{\mathrm{loss}}.
 \end{cases}
 $$
 
-The **Internal fluxes** graph includes `QCloss - Conduit loss`. It is hidden by default; click its legend entry to display it.
+### Experiment
+Start from the reference values.
 
-### 1. Predict
+1. Reference: `C_loss = 2`.
+2. In **Internal fluxes**, display:
+   - `QCloss - Conduit loss`;
+   - `QCS - Conduit to spring`;
+   - simulated spring discharge.
+3. In **Storages**, display `Conduit storage C`.
+4. Lower `C_loss` to about `1`.
+5. Reset and then increase `C_loss` to about `10`.
 
-Before changing the threshold:
+### Question 1
+What happens to the activation of $Q_{\mathrm{Closs}}$ when the threshold is lowered?
 
-- What should happen to the frequency of conduit loss if `C_loss` is lowered?
-- If more water leaves through `QCloss`, what should happen to the water available for `QCS`?
-- Which part of the spring hydrograph do you expect to be most affected?
+:::answer Answer to question 1
+The conduit reaches the lower threshold more easily. Conduit loss therefore activates more frequently and/or for larger amounts of water.
+:::endanswer
 
-### 2. Experiment
+### Question 2
+What happens to conduit storage when $C>C_{\mathrm{loss}}$?
 
-1. Start from the **Reference** simulation.
-2. Change only `C_loss`.
-3. Compare a clearly lower and a clearly higher threshold using the logarithmic slider.
+:::answer Answer to question 2
+The amount above the threshold is removed through $Q_{\mathrm{Closs}}$. The threshold therefore acts as an upper limit on conduit storage in this model formulation.
+:::endanswer
 
-### 3. Inspect the threshold response
+### Question 3
+Why can lowering `C_loss` reduce spring-discharge peaks?
 
-In **Internal fluxes**, display:
+:::answer Answer to question 3
+More water is removed through the loss pathway before it can remain stored in the conduit and leave through $Q_{\mathrm{CS}}$. Lower conduit storage also reduces the nonlinear conduit-to-spring discharge. Therefore a smaller fraction of rapid recharge remains available for the modeled spring.
+:::endanswer
 
-- `QCloss - Conduit loss`;
-- `QCS - Conduit to spring`;
-- simulated spring discharge.
+### Question 4
+What should happen if `C_loss` is increased so much that conduit storage never reaches it?
 
-In **Storages**, inspect conduit storage.
+:::answer Answer to question 4
+$Q_{\mathrm{Closs}}$ remains zero. The threshold pathway is effectively inactive during the simulated period, and conduit water can instead be stored, exchanged with the matrix, or released through $Q_{\mathrm{CS}}$.
+:::endanswer
 
-### 4. Interpret
+### Take-home message
+$C_{\mathrm{loss}}$ is not a continuous drainage coefficient. It is a **threshold** that determines when an additional loss pathway becomes active.
 
-Follow the causal chain:
+### Final reflection
+You have now changed one mechanism at a time. Compare the five exercises and ask yourself:
 
-**`C_loss` → activation of `QCloss` → conduit storage → `QCS` → spring discharge**
+- Which parameters mostly change **pathway partitioning**?
+- Which mostly change **timing or activation**?
+- Which mostly change **drainage from storage**?
+- Could different parameter changes compensate for one another and create similar spring hydrographs?
 
-**Guiding question:** How does removing water through the conduit-loss pathway change the fraction of conduit water that remains available to discharge at the modeled spring?
+That final question connects this manual investigation directly to **sensitivity analysis, parameter uncertainty, and equifinality**.
 
-### Finish
-
-Reset to the **Baget reference values**. At this point you have investigated the main mechanisms one at a time. The next tutorial section will deliberately combine parameters to explore parameter interactions and equifinality.
+**Finish by resetting to the Baget reference values.**

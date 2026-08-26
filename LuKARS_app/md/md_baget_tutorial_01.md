@@ -1,66 +1,53 @@
-#### Exercise 1 - Slow recharge and pathway partitioning
+## Exercise 1 — Slow infiltration to the matrix
+
+### Goal
+Understand how the slow hydrotope pathway $Q_{\mathrm{is}}$ redistributes recharge from the epikarst toward the matrix and how this can indirectly affect the spring response.
 
 ### Mechanism
-
-Slow infiltration from hydrotope $i$ to the matrix is controlled by
+For each hydrotope,
 
 $$
-Q_{\mathrm{is},i,t}
-=
-k_{\mathrm{is},i}
-E_{i,t}
-A_i
+Q_{\mathrm{is},i}=A_i\,k_{\mathrm{is},i}\,E_i
 $$
 
-For the same hydrotope storage, increasing `kis` directly increases the transfer toward the matrix. Because this water leaves the hydrotope storage, it can also modify how much water remains available for fast flow.
+A larger $k_{\mathrm{is}}$ means that, for the same epikarst storage $E$, more water is transferred toward the matrix.
 
-### 1. Predict
+### Experiment
+Start from **Reset Baget parameters**. Work only with **Hydrotope 1**.
 
-Before changing anything, predict what should happen when `kis` is increased for **Hydrotope 1**:
+1. Note the reference value: `kis ≈ 8.11e-5 1/h`.
+2. Increase `kis` by roughly one order of magnitude, to about `8e-4 1/h`.
+3. In **Internal fluxes**, display:
+   - `Qis - Hydrotope 1`;
+   - `Qhyd - Hydrotope 1`;
+   - `QMC - Matrix-conduit exchange`;
+   - simulated spring discharge.
+4. In **Storages**, display `Epikarst storage E1`, `Matrix storage M`, and `Conduit storage C`.
+5. Compare the modified simulation with the reference.
+6. As a contrast, try a smaller value around `8e-6 1/h`.
 
-- Will `Qis` increase or decrease?
-- What should happen to matrix storage?
-- Could `Qhyd` also change, even though `khyd`, `Emin`, `Emax`, and `alpha` remain fixed?
-- Do you expect the effect to be stronger on the spring peak or on the later recession?
+### Question 1
+When `kis` is increased, what happens first to $Q_{\mathrm{is}}$ and to epikarst storage $E_1$?
 
-### 2. Experiment
+:::answer Answer to question 1
+For a given $E_1$, increasing $k_{\mathrm{is}}$ directly increases $Q_{\mathrm{is}}$. Because water leaves the hydrotope faster through the slow pathway, $E_1$ tends to be lower than in the reference run.
+:::endanswer
 
-1. Start from the saved **Reference** simulation.
-2. Keep all parameters except `kis` unchanged.
-3. Change `kis` for Hydrotope 1 first to a clearly lower value and then to a clearly higher value within its logarithmic range.
-4. After each change, allow the model and live plots to update.
+### Question 2
+How can a stronger slow pathway influence the fast pathway $Q_{\mathrm{hyd}}$?
 
-### 3. Inspect the internal response first
+:::answer Answer to question 2
+The two pathways compete for water stored in the same hydrotope. A stronger $Q_{\mathrm{is}}$ tends to reduce $E_1$. This can make it more difficult for the hydrotope to reach or remain above the thresholds controlling $Q_{\mathrm{hyd}}$. Therefore fast-flow events may become weaker or less frequent.
+:::endanswer
 
-In **Internal fluxes**, compare:
+### Question 3
+Why can matrix storage increase even though the Baget reference model has no direct matrix-to-spring discharge?
 
-- `Qis - Hydrotope 1`;
-- `Qhyd - Hydrotope 1`;
-- `QMC`.
+:::answer Answer to question 3
+In the Baget reference parameterization, $k_{\mathrm{MS}}=0$, so $Q_{\mathrm{MS}}=0$. Water entering the matrix can nevertheless influence the spring indirectly through matrix-conduit exchange $Q_{\mathrm{MC}}$, then leave the conduit through $Q_{\mathrm{CS}}$.
+:::endanswer
 
-In **Storages**, compare:
+### Take-home message
+`kis` does more than scale one internal flux. By changing how quickly water leaves the hydrotope toward the matrix, it also changes epikarst storage and therefore the competition between slow and fast recharge pathways.
 
-- epikarst storage of Hydrotope 1;
-- matrix storage;
-- conduit storage.
-
-### 4. Then inspect the spring response
-
-In **Calibration / Discharge**, compare:
-
-- event peak magnitude;
-- timing of the response;
-- post-event recession;
-- discharge between events.
-
-### Interpret
-
-**Guiding question:** How does transferring more water toward the slow pathway redistribute water between the fast response and the longer-term response?
-
-Try to explain the spring hydrograph through the sequence:
-
-**`kis` → `Qis` → hydrotope/matrix storage → lower-compartment fluxes → spring discharge**
-
-### Reset
-
-Return to the **Baget reference values** before starting Exercise 2.
+**Before continuing:** reset to the Baget reference values.
