@@ -387,7 +387,7 @@ def run_model(sns, params):
     for j in range(h):
         run_up[:, :, j] = q_up(
             params.get("dt", 1.0), sns, params.get("E0", 1.0), params.get("Qis0", 1.0),
-            areas[j], params["kis"][j], params.get("Qhy0", 1.0), params["Emin"][j],
+            areas[j], params["kis"][j], params.get("Qhy0", 0.0), params["Emin"][j],
             params["Emax"][j], params["alpha"][j], params["khy"][j], params["lhy"][j]
         )
     bot = q_bot(params.get("dt", 1.0), run_up[1], run_up[2], params["TotalArea"],

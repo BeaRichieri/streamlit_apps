@@ -619,7 +619,7 @@ BAGET_PRESET = {
     "aCS": 3.85,
     "E0": 1.0,
     "Qis0": 1.0,
-    "Qhy0": 1.0,
+    "Qhy0": 0.0,
     "M0": 1.0,
     "C0": 0.5,
 }
@@ -2833,7 +2833,7 @@ $\\color{#4AA3FF}{C_{\\mathrm{loss}}}$
         )
 
         storage_figure.update_yaxes(
-            title_text="Storage or water level",
+            title_text="Storage / equivalent water level (mm)",
             secondary_y=False,
         )
 
