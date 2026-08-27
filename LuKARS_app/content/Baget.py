@@ -1553,9 +1553,9 @@ $\\color{#4AA3FF}{C_{\\mathrm{loss}}}$
         # The area fraction remains an additional app parameter (0-1).
         hydro_ranges = {
             "kis": (0.0, 1e-3, 1e-7),
-            "Emin": (1.0, 20.0, 0.1),
+            "Emin": (1.0, 150.0, 0.5),
             "Emax": (6.0, 200.0, 1.0),
-            "alpha": (0.0, 2.0, 0.01),
+            "alpha": (1.0, 3.0, 0.01),
             "khy": (1.0, 10000.0, 1.0),
             "lhy": (1000.0, 6500.0, 10.0),
         }
@@ -2757,6 +2757,12 @@ $\\color{#4AA3FF}{C_{\\mathrm{loss}}}$
         for index in range(
             n_hydrotopes
         ):
+            epikarst_visible = (
+                True
+                if f"Epikarst storage E{index + 1}" in visible_storage_series
+                else "legendonly"
+            )
+
             storage_figure.add_trace(
                 go.Scatter(
                     x=display_data.index,
@@ -2765,13 +2771,63 @@ $\\color{#4AA3FF}{C_{\\mathrm{loss}}}$
                         "Epikarst storage E"
                         f"{index + 1}"
                     ),
-                    visible=(
-                        True
-                        if f"Epikarst storage E{index + 1}" in visible_storage_series
-                        else "legendonly"
+                    visible=epikarst_visible,
+                ),
+                secondary_y=False,
+            )
+
+            # Hysteresis thresholds for the fast hydrotope pathway.
+            # Emax activates Qhyd; Emin deactivates it.
+            storage_figure.add_trace(
+                go.Scatter(
+                    x=[
+                        display_data.index.min(),
+                        display_data.index.max(),
+                    ],
+                    y=[
+                        emin[index],
+                        emin[index],
+                    ],
+                    name=f"Emin - Hydrotope {index + 1}",
+                    mode="lines",
+                    line=dict(
+                        color="#FF4B4B",
+                        dash="dot",
+                        width=1.5,
+                    ),
+                    visible=epikarst_visible,
+                    hovertemplate=(
+                        f"Emin - Hydrotope {index + 1}: "
+                        "%{y:.1f} mm<extra></extra>"
                     ),
                 ),
-            secondary_y=False,
+                secondary_y=False,
+            )
+
+            storage_figure.add_trace(
+                go.Scatter(
+                    x=[
+                        display_data.index.min(),
+                        display_data.index.max(),
+                    ],
+                    y=[
+                        emax[index],
+                        emax[index],
+                    ],
+                    name=f"Emax - Hydrotope {index + 1}",
+                    mode="lines",
+                    line=dict(
+                        color="#FF4B4B",
+                        dash="dash",
+                        width=1.5,
+                    ),
+                    visible=epikarst_visible,
+                    hovertemplate=(
+                        f"Emax - Hydrotope {index + 1}: "
+                        "%{y:.1f} mm<extra></extra>"
+                    ),
+                ),
+                secondary_y=False,
             )
         
         # Simulated spring discharge - right y-axis
@@ -2881,9 +2937,21 @@ $\\color{#4AA3FF}{C_{\\mathrm{loss}}}$
         )
 
         st.info(
-            "Use **Displayed storages** above the graph to choose which series "
-            "are shown. The selection is preserved when model parameters are "
-            "changed."
+            "**Fast-flow hysteresis:** the horizontal threshold lines show "
+            "$E_{\\min}$ (dotted) and $E_{\\max}$ (dashed) for each "
+            "hydrotope. $Q_{\\mathrm{hyd}}$ switches **on** when epikarst "
+            "storage reaches $E_{\\max}$, but once active it remains on until "
+            "storage falls below $E_{\\min}$. Because the displayed period "
+            "starts after model warm-up, fast flow may already be active on "
+            "1 March even when $E < E_{\\max}$: the activation threshold was "
+            "crossed earlier during warm-up. Increase $E_{\\min}$ to make the "
+            "switch-off visible during the displayed period."
+        )
+
+        st.caption(
+            "Use **Displayed storages** to choose which storage series are "
+            "shown. The corresponding Emin/Emax lines follow the visibility "
+            "of each epikarst storage."
         )
     # -----------------------------------------------------------------------------
     # Tutorial tab
