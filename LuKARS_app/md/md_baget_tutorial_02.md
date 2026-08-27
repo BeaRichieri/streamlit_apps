@@ -82,17 +82,11 @@ Reset first.
 Does increasing $E_{\min}$ simply make fast flow switch off earlier?
 
 :::answer Answer to question 3
-Not necessarily. $E_{\min}$ is the **deactivation threshold**, so a larger value means that the pathway can switch off at a higher storage.
+Increasing $E_{\min}$ has two coupled effects. It raises the threshold at which an active fast-flow pathway can switch off, but it also changes the nonlinear fast-flow equation.
 
-However, $E_{\min}$ is also part of the normalized storage term
+Because $Q_{\mathrm{hyd}}$ controls how quickly the epikarst drains, changing $E_{\min}$ also changes the simulated storage $E$. The resulting change in $Q_{\mathrm{hyd}}$ therefore cannot be predicted from $E_{\min}$ alone; the storage response must also be considered.
 
-$$
-r=\frac{E-E_{\min}}{E_{\max}-E_{\min}}.
-$$
-
-When $E<E_{\max}$, increasing $E_{\min}$ usually decreases $r$ and therefore reduces $Q_{\mathrm{hyd}}$. The epikarst then drains more slowly, so $E$ can remain above $E_{\min}$ for longer. This feedback can make the switch-off less immediate than expected.
-
-If $E>E_{\max}$, the effect on $r$ can reverse. Therefore $E_{\min}$ is both a hysteresis threshold **and** part of the nonlinear fast-flow equation.
+In the Baget experiment, increasing $E_{\min}$ raises the simulated epikarst storage and results in a larger fast-flow response. This is why simply increasing $E_{\min}$ does not necessarily make the switch-off easier to observe.
 :::endanswer
 
 ### Take a moment
