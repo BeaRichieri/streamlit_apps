@@ -41,10 +41,14 @@ The two pathways compete for water stored in the same hydrotope. A stronger $Q_{
 :::endanswer
 
 ### Question 3
-Why can matrix storage increase even though the Baget reference model has no direct matrix-to-spring discharge?
+Compare a **larger** and a **smaller** $k_{\mathrm{is}}$. How does this influence the matrix-conduit exchange $Q_{\mathrm{MC}}$, and why?
 
 :::answer Answer to question 3
-In the Baget reference parameterization, $k_{\mathrm{MS}}=0$, so $Q_{\mathrm{MS}}=0$. Water entering the matrix can nevertheless influence the spring indirectly through matrix-conduit exchange $Q_{\mathrm{MC}}$, then leave the conduit through $Q_{\mathrm{CS}}$.
+A larger $k_{\mathrm{is}}$ transfers more water from the epikarst to the matrix. The matrix therefore tends to become higher relative to the conduit, increasing the tendency for **matrix → conduit** exchange and generally increasing positive $Q_{\mathrm{MC}}$.
+
+A smaller $k_{\mathrm{is}}$ supplies less water to the matrix. The difference between matrix and conduit storage tends to become smaller, so $Q_{\mathrm{MC}}$ generally decreases. If the conduit becomes higher than the matrix, the exchange can even reverse and become **conduit → matrix**.
+
+The exact response is dynamic because changing $k_{\mathrm{is}}$ also affects epikarst storage and $Q_{\mathrm{hyd}}$. Therefore compare the change in $Q_{\mathrm{MC}}$ together with the matrix and conduit storages.
 :::endanswer
 
 ### Take-home message

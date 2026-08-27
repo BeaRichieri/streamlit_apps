@@ -1456,7 +1456,6 @@ st.markdown(
 
 
 # -----------------------------------------------------------------------------    
-@st.fragment
 def render_baget_interactive_section() -> None:
     # -----------------------------------------------------------------------------
     # Manual-calibration controls
@@ -1964,6 +1963,7 @@ $\\color{#4AA3FF}{C_{\\mathrm{loss}}}$
         st.plotly_chart(
             precipitation_figure,
             use_container_width=True,
+            key="baget_overview_plot",
             config={
                 "displaylogo": False,
                 "scrollZoom": True,
@@ -2071,6 +2071,7 @@ $\\color{#4AA3FF}{C_{\\mathrm{loss}}}$
         st.plotly_chart(
             calibration_figure,
             use_container_width=True,
+            key="baget_calibration_plot",
             config={
                 "displaylogo": False,
                 "scrollZoom": True,
@@ -2668,6 +2669,7 @@ $\\color{#4AA3FF}{C_{\\mathrm{loss}}}$
         st.plotly_chart(
             flux_figure,
             use_container_width=True,
+            key="baget_flux_plot",
             config={
                 "displaylogo": False,
                 "scrollZoom": True,
@@ -2701,7 +2703,7 @@ $\\color{#4AA3FF}{C_{\\mathrm{loss}}}$
         # ------------------------------------------------------------------
         with st.expander(
             "💡 How does fast-flow hysteresis work?",
-            expanded=True,
+            expanded=False,
         ):
             st.markdown(
                 """
@@ -3078,6 +3080,7 @@ $E = {demo_e:.0f}$ mm
         st.plotly_chart(
             storage_figure,
             use_container_width=True,
+            key="baget_storage_plot",
             config={
                 "displaylogo": False,
                 "scrollZoom": True,
