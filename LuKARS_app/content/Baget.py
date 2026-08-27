@@ -2786,6 +2786,8 @@ $E = {demo_e:.0f}$ mm
         storage_series_options = [
             "Matrix storage M",
             "Conduit storage C",
+            "M - C",
+            "QMC - Matrix-conduit exchange",
         ]
 
         for index in range(n_hydrotopes):
@@ -2838,6 +2840,60 @@ $E = {demo_e:.0f}$ mm
                 ),
             ),
             secondary_y=False,
+        )
+
+        # Difference between matrix and conduit storage.
+        # Positive: M > C; negative: C > M.
+        storage_figure.add_trace(
+            go.Scatter(
+                x=display_data.index,
+                y=(
+                    run_bot_display[9]
+                    - run_bot_display[8]
+                ),
+                name="M - C",
+                mode="lines",
+                visible=(
+                    True
+                    if "M - C" in visible_storage_series
+                    else "legendonly"
+                ),
+                line=dict(
+                    dash="dot",
+                    width=2,
+                ),
+                hovertemplate=(
+                    "M - C: %{y:.3f} mm"
+                    "<extra></extra>"
+                ),
+            ),
+            secondary_y=False,
+        )
+
+        # Matrix-conduit exchange on the right axis so it can be compared
+        # directly with M-C in the same time window.
+        storage_figure.add_trace(
+            go.Scatter(
+                x=display_data.index,
+                y=run_bot_display[6],
+                name="QMC - Matrix-conduit exchange",
+                mode="lines",
+                visible=(
+                    True
+                    if "QMC - Matrix-conduit exchange"
+                    in visible_storage_series
+                    else "legendonly"
+                ),
+                line=dict(
+                    dash="dashdot",
+                    width=2,
+                ),
+                hovertemplate=(
+                    "QMC: %{y:.3e} m3/s"
+                    "<extra></extra>"
+                ),
+            ),
+            secondary_y=True,
         )
 
         for index in range(
@@ -2980,8 +3036,9 @@ $E = {demo_e:.0f}$ mm
         )
 
         storage_figure.update_yaxes(
-            title_text="Simulated spring discharge (m3/s)",
+            title_text="Discharge / exchange flux (m3/s)",
             secondary_y=True,
+            hoverformat=".3e",
         )
 
         # storage_limits = axis_limit_controls(
@@ -3033,9 +3090,11 @@ $E = {demo_e:.0f}$ mm
         )
 
         st.caption(
-            "Use **Displayed storages** to choose which storage series are "
-            "shown. The corresponding Emin/Emax lines follow the visibility "
-            "of each epikarst storage."
+            "Use **Displayed storages** to choose which series are shown. "
+            "The corresponding Emin/Emax lines follow the visibility of each "
+            "epikarst storage. For the matrix-conduit exchange, compare "
+            "**M - C** with **QMC**: positive M - C favours matrix → conduit "
+            "exchange, while negative M - C favours conduit → matrix exchange."
         )
     # -----------------------------------------------------------------------------
     # Tutorial tab

@@ -47,12 +47,29 @@ Yes. The observed spring hydrograph constrains the combined outlet response, but
 :::endanswer
 
 ### Optional challenge — Change `aMC`
-Reset `kMC`, then change only `aMC` from `2.90` to about `1.5`.
+Reset `kMC`, then change only `aMC` from `2.90` to `1.0`.
 
-What changes: a simple scaling of exchange, or the way exchange depends on the size of the storage difference?
+Display **M - C** together with **QMC** and compare the new simulation with the reference.
 
-:::answer Optional challenge answer
-$a_{\mathrm{MC}}$ changes the **nonlinearity** of the exchange. It therefore changes how strongly small and large storage differences are weighted, rather than simply multiplying all $Q_{\mathrm{MC}}$ values by the same factor.
+### Question 4
+Why can reducing $a_{\mathrm{MC}}$ have only a modest effect when $|M-C|$ is around 0.6–0.7, but a much stronger effect — even a reversal of $Q_{\mathrm{MC}}$ — when $M$ and $C$ are much closer?
+
+:::answer Answer to question 4
+$a_{\mathrm{MC}}$ controls how strongly the exchange responds to the size of $|M-C|$.
+
+For example,
+
+$$
+0.2^{2.9}\approx0.009,
+\qquad
+0.2^{1}=0.2,
+$$
+
+so reducing $a_{\mathrm{MC}}$ to 1 makes a **small** storage difference much more influential. For a larger difference such as 0.7, the relative change is much smaller.
+
+Because the model is dynamic, stronger exchange also changes $M$ and $C$ themselves. When they are already close, the stronger coupling can make them cross. If the sign of $M-C$ changes, the direction of exchange also changes and $Q_{\mathrm{MC}}$ can become negative, meaning **conduit → matrix**.
+
+So do not compare the new $Q_{\mathrm{MC}}$ only with the old value of $M-C$: inspect the new **M - C** and **QMC** curves together.
 :::endanswer
 
 ### Take-home message
