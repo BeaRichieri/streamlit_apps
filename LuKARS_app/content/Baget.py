@@ -2697,6 +2697,92 @@ $\\color{#4AA3FF}{C_{\\mathrm{loss}}}$
             load_colored_md("md_baget_07.md")
         )
 
+        # ------------------------------------------------------------------
+        # Compact teaching demo: fast-flow hysteresis
+        # ------------------------------------------------------------------
+        with st.expander(
+            "💡 How does fast-flow hysteresis work?",
+            expanded=True,
+        ):
+            st.markdown(
+                """
+Fast flow does **not** depend only on the current epikarst storage $E$.
+It also depends on whether the fast pathway was already **ON** or **OFF**.
+
+- If $E \\ge E_{\\max}$ → fast flow switches **ON**.
+- If $E \\le E_{\\min}$ → fast flow switches **OFF**.
+- If $E_{\\min} < E < E_{\\max}$ → the model **keeps the previous state**.
+
+This is the hysteresis effect.
+                """
+            )
+
+            demo_col1, demo_col2 = st.columns(
+                [1.2, 1.0],
+                gap="large",
+            )
+
+            with demo_col1:
+                demo_emin = 30.0
+                demo_emax = 70.0
+
+                demo_e = st.slider(
+                    "Example epikarst storage E (mm)",
+                    min_value=0.0,
+                    max_value=100.0,
+                    value=50.0,
+                    step=1.0,
+                    key="baget_hysteresis_demo_e",
+                )
+
+                demo_previous_state = st.radio(
+                    "Was the fast pathway previously active?",
+                    options=["OFF", "ON"],
+                    horizontal=True,
+                    key="baget_hysteresis_demo_previous_state",
+                )
+
+                if demo_e >= demo_emax:
+                    demo_state = "ON"
+                    demo_reason = (
+                        "E is above Emax, so the fast pathway is activated."
+                    )
+                elif demo_e <= demo_emin:
+                    demo_state = "OFF"
+                    demo_reason = (
+                        "E is below Emin, so the fast pathway is deactivated."
+                    )
+                else:
+                    demo_state = demo_previous_state
+                    demo_reason = (
+                        "E lies between Emin and Emax, so the pathway keeps "
+                        "its previous state."
+                    )
+
+            with demo_col2:
+                st.markdown(
+                    f"""
+**Example thresholds**
+
+$E_{{\\min}} = {demo_emin:.0f}$ mm  
+$E_{{\\max}} = {demo_emax:.0f}$ mm
+
+**Current storage**
+
+$E = {demo_e:.0f}$ mm
+
+### Fast pathway: **{demo_state}**
+
+{demo_reason}
+                    """
+                )
+
+            st.caption(
+                "Try setting E between 30 and 70 mm and switch the previous "
+                "state between OFF and ON. The same E can then give two "
+                "different fast-flow states: this is hysteresis."
+            )
+
         storage_series_options = [
             "Matrix storage M",
             "Conduit storage C",
@@ -2937,15 +3023,13 @@ $\\color{#4AA3FF}{C_{\\mathrm{loss}}}$
         )
 
         st.info(
-            "**Fast-flow hysteresis:** the horizontal threshold lines show "
-            "$E_{\\min}$ (dotted) and $E_{\\max}$ (dashed) for each "
-            "hydrotope. $Q_{\\mathrm{hyd}}$ switches **on** when epikarst "
-            "storage reaches $E_{\\max}$, but once active it remains on until "
-            "storage falls below $E_{\\min}$. Because the displayed period "
-            "starts after model warm-up, fast flow may already be active on "
-            "1 March even when $E < E_{\\max}$: the activation threshold was "
-            "crossed earlier during warm-up. Increase $E_{\\min}$ to make the "
-            "switch-off visible during the displayed period."
+            "**Reading the Baget simulation:** the dotted lines are "
+            "$E_{\\min}$ and the dashed lines are $E_{\\max}$. "
+            "If $Q_{\\mathrm{hyd}}$ is already active while $E$ lies between "
+            "the two thresholds, this is not an error: the pathway was "
+            "activated earlier and remains ON until $E$ falls below "
+            "$E_{\\min}$. The displayed period begins after a warm-up, so "
+            "that activation may have happened before 1 March."
         )
 
         st.caption(
