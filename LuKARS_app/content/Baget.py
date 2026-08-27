@@ -164,21 +164,11 @@ TUTORIAL_EXERCISES = {
 }
 
 
-def render_tutorial_exercise_file(
-    filename: Path,
-) -> None:
-    """Render one exercise from Markdown, with $$...$$ blocks via st.latex."""
-    exercise_text = filename.read_text(
-        encoding="utf-8"
-    )
-
-    # Keep each exercise entirely in its Markdown file, including equations.
-    # Display equations are delimited by $$ ... $$ and rendered with st.latex
-    # for reliable Streamlit formatting. All other Markdown is rendered
-    # normally, including inline $...$ mathematics.
+def _render_tutorial_markdown(markdown_text: str) -> None:
+    """Render tutorial Markdown and $$...$$ display equations."""
     parts = re.split(
         r"(\$\$.*?\$\$)",
-        exercise_text,
+        markdown_text,
         flags=re.DOTALL,
     )
 
@@ -192,12 +182,75 @@ def render_tutorial_exercise_file(
             stripped.startswith("$$")
             and stripped.endswith("$$")
         ):
-            equation = stripped[2:-2].strip()
-            st.latex(equation)
+            st.latex(
+                stripped[2:-2].strip()
+            )
         else:
             st.markdown(
                 color_parameter_markdown(part)
             )
+
+
+def render_tutorial_exercise_file(
+    filename: Path,
+) -> None:
+    """Render one tutorial exercise with collapsed answer expanders.
+
+    Answer blocks in the Markdown files use this syntax:
+
+        :::answer Answer to question 1
+        Answer text...
+        :::endanswer
+
+    The same renderer is used in the Tutorial tab and in the standalone
+    exercise view, so answers remain hidden in both places until opened.
+    """
+    exercise_text = filename.read_text(
+        encoding="utf-8"
+    )
+
+    answer_pattern = re.compile(
+        r":::answer(?:[ \t]+([^\n]+))?\n(.*?)\n:::endanswer",
+        flags=re.DOTALL,
+    )
+
+    position = 0
+
+    for match in answer_pattern.finditer(
+        exercise_text
+    ):
+        # Render everything before the answer block normally.
+        _render_tutorial_markdown(
+            exercise_text[
+                position:match.start()
+            ]
+        )
+
+        title = (
+            match.group(1)
+            or "Show answer"
+        ).strip()
+
+        answer_text = (
+            match.group(2)
+            or ""
+        ).strip()
+
+        # Keep answers closed by default.
+        with st.expander(
+            f"💡 {title}",
+            expanded=False,
+        ):
+            _render_tutorial_markdown(
+                answer_text
+            )
+
+        position = match.end()
+
+    # Render the remaining tutorial text after the last answer.
+    _render_tutorial_markdown(
+        exercise_text[position:]
+    )
 
 
 def tutorial_exercise_url(
