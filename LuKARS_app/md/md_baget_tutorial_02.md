@@ -1,7 +1,7 @@
 ## Exercise 2 — Fast hydrotope flow to the conduit
 
 ### Goal
-Understand how the activation threshold and discharge coefficient control rapid recharge from a hydrotope to the conduit.
+Understand how $E_{\min}$, $E_{\max}$, $k_{\mathrm{hyd}}$, and $\alpha$ control the **activation, duration, magnitude, and shape** of rapid recharge from a hydrotope to the conduit.
 
 ### Mechanism
 When fast flow is active, LuKARS uses
@@ -16,31 +16,92 @@ A_i\,\frac{k_{\mathrm{hyd},i}}{l_{\mathrm{hyd},i}}
 \right)^{\alpha_i}
 $$
 
-Fast flow starts when storage reaches $E_{\max}$ and, once active, remains active until storage falls below $E_{\min}$.
+Fast flow is hysteretic:
 
-### Experiment A — Change the activation threshold
+- it switches **ON** when $E_i \ge E_{\max,i}$;
+- it switches **OFF** when $E_i \le E_{\min,i}$;
+- between the two thresholds, the previous ON/OFF state is retained.
+
+Define the normalized storage term
+
+$$
+r_i=
+\frac{E_i-E_{\min,i}}
+{E_{\max,i}-E_{\min,i}}.
+$$
+
+The thresholds therefore do more than switch the pathway on and off: they also change $r_i$, and hence the magnitude of $Q_{\mathrm{hyd},i}$ while the pathway is active.
+
+---
+
+### Experiment A — Change $E_{\max}$
+
 Start from the reference simulation and work with **Hydrotope 1**.
 
 1. Reference: `Emax = 142 mm`.
 2. Lower `Emax` to about `60 mm`.
 3. Inspect `Epikarst storage E1`, `Qhyd - Hydrotope 1`, `Conduit storage C`, `QCS`, and simulated spring discharge.
-4. Reset and then increase `Emax` to about `180 mm`.
+4. Reset and increase `Emax` to about `180 mm`.
 
 ### Question 1
-What happens to fast-flow activation when $E_{\max}$ is lowered?
+Why can changing $E_{\max}$ affect both **when fast flow starts** and **how large it becomes**?
 
 :::answer Answer to question 1
-Fast flow can activate at a lower epikarst storage, so activation generally occurs earlier and/or more often. In addition, the denominator $E_{\max}-E_{\min}$ becomes smaller, which tends to increase the normalized storage term once fast flow is active.
+$E_{\max}$ is the activation threshold, so lowering it makes fast-flow activation easier and generally earlier or more frequent.
+
+But $E_{\max}$ also appears in the denominator of
+
+$$
+r=\frac{E-E_{\min}}{E_{\max}-E_{\min}}.
+$$
+
+For the same $E$ and $E_{\min}$, lowering $E_{\max}$ makes the denominator smaller and generally increases $r$, so $Q_{\mathrm{hyd}}$ can also become larger once the pathway is active.
+
+Changing $Q_{\mathrm{hyd}}$ then changes how quickly the epikarst drains, so the storage trajectory itself also changes.
 :::endanswer
 
 ### Question 2
 Which part of the spring hydrograph is most likely to react to this change?
 
 :::answer Answer to question 2
-The most visible effect is usually around recharge events and spring-discharge peaks, because $Q_{\mathrm{hyd}}$ feeds the rapidly responding conduit compartment directly.
+The strongest effect is usually around recharge events and spring-discharge peaks, because $Q_{\mathrm{hyd}}$ feeds the rapidly responding conduit compartment directly.
 :::endanswer
 
-### Experiment B — Change the magnitude of fast flow
+---
+
+### Experiment B — Change $E_{\min}$
+
+Reset first.
+
+1. Reference: `Emin = 10.2 mm` for Hydrotope 1.
+2. Increase `Emin` substantially, for example to `60–100 mm`, while keeping `Emin < Emax`.
+3. Compare `Epikarst storage E1` and `Qhyd - Hydrotope 1`.
+4. Reset and try a lower $E_{\min}$ again.
+
+### Question 3
+Does increasing $E_{\min}$ simply make fast flow switch off earlier?
+
+:::answer Answer to question 3
+Not necessarily. $E_{\min}$ is the **deactivation threshold**, so a larger value means that the pathway can switch off at a higher storage.
+
+However, $E_{\min}$ is also part of the normalized storage term
+
+$$
+r=\frac{E-E_{\min}}{E_{\max}-E_{\min}}.
+$$
+
+When $E<E_{\max}$, increasing $E_{\min}$ usually decreases $r$ and therefore reduces $Q_{\mathrm{hyd}}$. The epikarst then drains more slowly, so $E$ can remain above $E_{\min}$ for longer. This feedback can make the switch-off less immediate than expected.
+
+If $E>E_{\max}$, the effect on $r$ can reverse. Therefore $E_{\min}$ is both a hysteresis threshold **and** part of the nonlinear fast-flow equation.
+:::endanswer
+
+### Take a moment
+This is why $E_{\min}$ and $E_{\max}$ should not be interpreted as simple independent ON/OFF switches. They affect both the **state of the pathway** and the **strength of the flux**.
+
+---
+
+### Experiment C — Change the magnitude coefficient
+
 Reset first.
 
 1. Reference: `khyd ≈ 2730 m2/h` for Hydrotope 1.
@@ -48,23 +109,64 @@ Reset first.
 3. Then try a smaller value around `500 m2/h`.
 4. Keep all other parameters fixed.
 
-### Question 3
-How is changing `khyd` different from changing `Emax`?
+### Question 4
+How is changing $k_{\mathrm{hyd}}$ different from changing the thresholds?
 
-:::answer Answer to question 3
-$E_{\max}$ mainly controls **when** the fast pathway activates. $k_{\mathrm{hyd}}$ mainly scales **how much** rapid flow is produced once the pathway is active. Both can change spring peaks, but through different mechanisms.
+:::answer Answer to question 4
+$k_{\mathrm{hyd}}$ mainly scales the magnitude of fast flow once the pathway is active.
+
+By contrast, $E_{\min}$ and $E_{\max}$ also control the hysteretic activation/deactivation state and modify the normalized storage term. The thresholds therefore influence both **timing** and **magnitude**, while $k_{\mathrm{hyd}}$ acts mainly as a multiplicative scaling parameter.
 :::endanswer
 
-### Optional challenge — Nonlinearity
-Reset and reduce `alpha` from `1.98` to about `1.0`.
+---
 
-For normalized storage ratios between 0 and 1, what happens to the fast-flow term?
+### Experiment D — Change the nonlinearity $\alpha$
 
-:::answer Optional challenge answer
-For $0<r<1$, reducing the exponent increases $r^{\alpha}$. Therefore a smaller $\alpha$ generally makes the fast-flow response stronger over that part of the storage range. This parameter controls the shape of the response rather than only a simple multiplicative scale.
+Reset first.
+
+1. Reference: `alpha = 1.98`.
+2. Reduce it to about `1.0`.
+3. Increase it to about `3.0`.
+4. Compare the response during moderate-storage periods and during the largest recharge events.
+
+Remember:
+
+$$
+Q_{\mathrm{hyd}}\propto r^\alpha,
+\qquad
+r=
+\frac{E-E_{\min}}
+{E_{\max}-E_{\min}}.
+$$
+
+### Question 5
+Does increasing $\alpha$ always increase fast flow?
+
+:::answer Answer to question 5
+No. The effect depends on the value of the normalized storage term $r$.
+
+- If $0<r<1$, increasing $\alpha$ makes $r^\alpha$ **smaller**, so fast flow decreases.
+- If $r=1$, changing $\alpha$ has no effect on this term.
+- If $r>1$, increasing $\alpha$ makes $r^\alpha$ **larger**, so fast flow increases.
+
+Therefore a larger $\alpha$ can suppress fast flow at intermediate storage while amplifying it during very high-storage conditions. $\alpha$ changes the **shape and nonlinearity** of the fast-flow response, not simply its overall magnitude.
 :::endanswer
+
+### Question 6
+Why can the effect of $\alpha$ look different at different times in the same simulation?
+
+:::answer Answer to question 6
+Because $r$ changes with epikarst storage. During one period the storage may give $0<r<1$, while during a strong recharge event it may give $r>1$. The same increase in $\alpha$ can therefore reduce $Q_{\mathrm{hyd}}$ at one time and increase it at another.
+:::endanswer
+
+---
 
 ### Take-home message
-The fast pathway has both **activation controls** and **magnitude/shape controls**. Different parameters can therefore alter a spring peak for different physical reasons.
+The fast pathway contains several interacting controls:
+
+- $E_{\max}$ controls activation **and** changes the normalized storage term;
+- $E_{\min}$ controls deactivation **and** changes the normalized storage term;
+- $k_{\mathrm{hyd}}$ mainly scales the amount of fast flow;
+- $\alpha$ controls the nonlinear shape, and its effect depends on whether $r$ is below or above 1.
 
 **Before continuing:** reset to the Baget reference values.
