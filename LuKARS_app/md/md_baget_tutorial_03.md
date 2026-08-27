@@ -55,21 +55,54 @@ Display **M - C** together with **QMC** and compare the new simulation with the 
 Why can reducing $a_{\mathrm{MC}}$ have only a modest effect when $|M-C|$ is around 0.6–0.7, but a much stronger effect — even a reversal of $Q_{\mathrm{MC}}$ — when $M$ and $C$ are much closer?
 
 :::answer Answer to question 4
-$a_{\mathrm{MC}}$ controls how strongly the exchange responds to the size of $|M-C|$.
+The key point is that changing $a_{\mathrm{MC}}$ also changes the simulated difference $M-C$.
 
-For example,
+The exchange is proportional to
 
 $$
-0.2^{2.9}\approx0.009,
+Q_{\mathrm{MC}}
+\propto
+\operatorname{sgn}(M-C)
+|M-C|^{a_{\mathrm{MC}}}.
+$$
+
+In the reference simulation, for example, you may have approximately
+
+$$
+|M-C| \approx 0.67,
 \qquad
-0.2^{1}=0.2,
+a_{\mathrm{MC}}\approx 3.
 $$
 
-so reducing $a_{\mathrm{MC}}$ to 1 makes a **small** storage difference much more influential. For a larger difference such as 0.7, the relative change is much smaller.
+The exchange-driving term is then
 
-Because the model is dynamic, stronger exchange also changes $M$ and $C$ themselves. When they are already close, the stronger coupling can make them cross. If the sign of $M-C$ changes, the direction of exchange also changes and $Q_{\mathrm{MC}}$ can become negative, meaning **conduit → matrix**.
+$$
+0.67^3 \approx 0.30.
+$$
 
-So do not compare the new $Q_{\mathrm{MC}}$ only with the old value of $M-C$: inspect the new **M - C** and **QMC** curves together.
+When $a_{\mathrm{MC}}$ is reduced to 1, matrix and conduit become more strongly coupled when their storages are close. Their difference can therefore become much smaller, for example
+
+$$
+|M-C| \approx 0.30.
+$$
+
+But now
+
+$$
+0.30^1 = 0.30.
+$$
+
+So a **smaller $M-C$ can produce almost the same $Q_{\mathrm{MC}}$**. This is why the peaks of $Q_{\mathrm{MC}}$ can remain similar even though the black $M-C$ curve becomes much smaller.
+
+The largest difference appears when $M$ and $C$ are already very close. With $a_{\mathrm{MC}}\approx3$, a small difference is strongly suppressed:
+
+$$
+0.2^3 = 0.008.
+$$
+
+With $a_{\mathrm{MC}}=1$, small differences remain important. The stronger coupling can also make $M$ and $C$ cross. When $M-C$ changes sign, $Q_{\mathrm{MC}}$ changes direction and can become negative, meaning **conduit → matrix**.
+
+**Main idea:** do not interpret the effect of $a_{\mathrm{MC}}$ from the exponent alone. Changing the exponent also changes $M$ and $C$, so always compare the new **M - C** and **QMC** curves together.
 :::endanswer
 
 ### Take-home message
