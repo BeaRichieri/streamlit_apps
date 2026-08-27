@@ -1158,7 +1158,6 @@ def render_assessment(
                     ),
                 )
 
-@st.fragment
 def render_assessment_fragment(
     filename: Path,
     container_key: str,
@@ -2859,8 +2858,9 @@ $E = {demo_e:.0f}$ mm
                     else "legendonly"
                 ),
                 line=dict(
-                    dash="dot",
-                    width=2,
+                    color="#111111",
+                    dash="solid",
+                    width=2.5,
                 ),
                 hovertemplate=(
                     "M - C: %{y:.3f} mm"
@@ -2885,8 +2885,9 @@ $E = {demo_e:.0f}$ mm
                     else "legendonly"
                 ),
                 line=dict(
-                    dash="dashdot",
-                    width=2,
+                    color="#7B2CBF",
+                    dash="dash",
+                    width=2.5,
                 ),
                 hovertemplate=(
                     "QMC: %{y:.3e} m3/s"
@@ -2972,6 +2973,14 @@ $E = {demo_e:.0f}$ mm
                 secondary_y=False,
             )
         
+        # Zero reference: useful for identifying sign changes in M-C.
+        storage_figure.add_hline(
+            y=0.0,
+            line_color="#9A9A9A",
+            line_dash="dot",
+            line_width=1.0,
+        )
+
         # Simulated spring discharge - right y-axis
         storage_figure.add_trace(
             go.Scatter(
