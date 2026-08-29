@@ -385,16 +385,19 @@ explore the three-dimensional parameter space.
                 xaxis=dict(
                     title="x₁",
                     range=[0, 1],
+                    autorange=False,
                     dtick=1 / (num_levels - 1),
                 ),
                 yaxis=dict(
                     title="x₂",
                     range=[0, 1],
+                    autorange=False,
                     dtick=1 / (num_levels - 1),
                 ),
                 zaxis=dict(
                     title="x₃",
                     range=[0, 1],
+                    autorange=False,
                     dtick=1 / (num_levels - 1),
                 ),
             ),
