@@ -1,0 +1,1 @@
+This synthetic experiment links the **LuKARS equations** to the more realistic case studies. Start from one controlled precipitation event and follow how the signal propagates through **one hydrotope**, the **matrix**, the **conduit**, and finally the **spring**.

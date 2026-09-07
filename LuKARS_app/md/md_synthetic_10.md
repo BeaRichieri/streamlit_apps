@@ -1,0 +1,1 @@
+A single precipitation event can generate very different discharge responses depending on how water is partitioned between the **hydrotope, matrix and conduit pathways**. The simple reservoir gives one integrated response, whereas LuKARS allows the internal fast/slow processes and their interaction to be inspected explicitly.

@@ -1,0 +1,1 @@
+The **same precipitation event** is passed through two conceptual structures. The simple reservoir provides the reference response introduced earlier in the course, while LuKARS separates fast and slow pathways.

@@ -197,6 +197,7 @@ pages = {
     "📦 Lumped conceptual models": CONTENT_DIR / "lumped_models.py",
     "📍 Overview": CONTENT_DIR / "LuKARS_overview.py",
     "📖 Model description": CONTENT_DIR / "model_description.py",
+    "🧪 Synthetic experiment": CONTENT_DIR / "synthetic_case.py",
     #"🪨 Kerschbaum case study": CONTENT_DIR / "Kerschbaum.py",
     "⛰️ Baget case study": BAGET_PAGE,
     #"📁 Upload your own data": CONTENT_DIR / "own_data.py",

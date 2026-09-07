@@ -1,0 +1,1 @@
+The storage plot connects the fluxes to the model states: the precipitation event first modifies the hydrotope storage $E$, while the matrix $M$ and conduit $C$ respond according to their recharge, exchange and drainage terms.
