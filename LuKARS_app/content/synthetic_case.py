@@ -737,7 +737,7 @@ st.markdown(load_md(MD_DIR, "md_synthetic_03.md", LANGUAGE))
 with st.container(border=True):
     simple_col, lukars_col = st.columns(
         2,
-        gap="small",
+        gap="medium",
     )
 
     with simple_col:
