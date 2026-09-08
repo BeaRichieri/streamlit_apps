@@ -18,10 +18,10 @@ def _navigate_to(path: Path):
 # Application directories
 # -----------------------------------------------------------------------------
 if "directories_initialized" not in st.session_state:
-    #BASE_DIR = Path("sensitivity_uncertainty_app")
+    BASE_DIR = Path("sensitivity_uncertainty_app")
 
     # For local use with an absolute path, replace the line above with:
-    BASE_DIR = Path("C:/Users/beatr/Documents/Eurokarst2026/Course/sensitivity_uncertainty_app")
+    #BASE_DIR = Path("C:/Users/beatr/Documents/Eurokarst2026/Course/sensitivity_uncertainty_app")
 
     st.session_state.BASE_DIR = BASE_DIR
     st.session_state.CONTENT_DIR = BASE_DIR / "content"
