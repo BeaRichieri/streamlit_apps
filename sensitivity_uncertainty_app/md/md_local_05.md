@@ -1,0 +1,4 @@
+- Local sensitivity describes model behaviour around **one reference point**.
+- The result may change when the reference parameter set changes.
+- A small local derivative does not necessarily imply that a parameter is globally unimportant.
+- Local methods are inexpensive and useful near a calibrated solution, but they do not explore the complete parameter space.

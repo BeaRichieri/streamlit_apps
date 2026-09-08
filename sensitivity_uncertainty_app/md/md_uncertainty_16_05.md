@@ -1,0 +1,1 @@
+The model performance is evaluated using the **Kling-Gupta Efficiency (KGE)**. In this teaching example, a simulation is classified as behavioural when its KGE is equal to or larger than the threshold selected with the slider.

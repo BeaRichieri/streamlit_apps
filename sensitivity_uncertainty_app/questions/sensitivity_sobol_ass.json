@@ -1,0 +1,68 @@
+[
+  {
+    "question": "What does the first-order Sobol' index $S_i$ represent?",
+    "options": {
+      "The fraction of output variance associated with parameter $i$ acting alone.": true,
+      "The fraction of output variance associated only with interactions.": false,
+      "The numerical error of parameter $i$.": false,
+      "The total number of model evaluations required for parameter $i$.": false
+    },
+    "success": "✅ Correct. $S_i$ measures the contribution of parameter $i$ acting alone.",
+    "error": "❌ Not quite. Remember that the first-order index describes the parameter acting alone."
+  },
+  {
+    "question": "What does the total-order index $S_{T_i}$ include?",
+    "options": {
+      "Only the individual effect of parameter $i$.": false,
+      "The individual effect of parameter $i$ plus all interactions involving it.": true,
+      "Only pairwise interactions between the other parameters.": false,
+      "Only sampling uncertainty.": false
+    },
+    "success": "✅ Correct. $S_{T_i}$ includes the individual contribution and every interaction involving parameter $i$.",
+    "error": "❌ Not quite. Think of the total-order index as parameter $i$ alone plus all interactions involving it."
+  },
+  {
+    "question": "If $S_{T_i}$ is approximately equal to $S_i$, what does this usually indicate?",
+    "options": {
+      "Parameter $i$ has strong interactions with every other parameter.": false,
+      "Interactions involving parameter $i$ contribute little to the output variance.": true,
+      "Parameter $i$ must be the most influential parameter.": false,
+      "The sample size is necessarily too small.": false
+    },
+    "success": "✅ Correct. A small $S_{T_i}-S_i$ gap indicates little interaction contribution involving parameter $i$.",
+    "error": "❌ Not quite. Focus on what the difference $S_{T_i}-S_i$ represents."
+  },
+  {
+    "question": "In this synthetic experiment, which parameters interact when $\\gamma>0$?",
+    "options": {
+      "$x_1$ and $x_2$": false,
+      "$x_2$ and $x_3$": false,
+      "$x_1$ and $x_3$": true,
+      "All three parameters equally": false
+    },
+    "success": "✅ Correct. The explicit interaction term contains $x_1$ and $x_3$.",
+    "error": "❌ Not quite. Look again at the interaction term $\\gamma(x_1-0.5)(x_3-0.5)$."
+  },
+  {
+    "question": "Why is the sample size $N$ increased in a Sobol' convergence check?",
+    "options": {
+      "To check whether the estimated indices become stable.": true,
+      "To force every sensitivity index to become zero.": false,
+      "To reduce the number of model evaluations.": false,
+      "To remove parameter interactions from the model.": false
+    },
+    "success": "✅ Correct. Convergence means that the estimated indices become stable as the sampling effort increases.",
+    "error": "❌ Not quite. The convergence plot checks the stability of the estimated indices."
+  },
+  {
+    "question": "What is a main difference between Morris and Sobol' sensitivity analysis?",
+    "options": {
+      "Morris is local, while Sobol' is global.": false,
+      "Morris mainly screens and ranks parameters, while Sobol' quantifies contributions to output variance.": true,
+      "Sobol' changes only one parameter at a time, while Morris changes all parameters simultaneously.": false,
+      "Sobol' does not require repeated model evaluations.": false
+    },
+    "success": "✅ Correct. Morris is mainly a screening/ranking method; Sobol' provides a quantitative variance decomposition.",
+    "error": "❌ Not quite. Both are global methods, but they provide different types of information."
+  }
+]

@@ -1,0 +1,5 @@
+- Parameter uncertainty concerns incomplete knowledge of parameter values.
+- Plausible parameter values can be represented by ranges or probability distributions.
+- Sampling parameter sets and evaluating the forward model produces an **ensemble** of model realizations.
+- The spread of the ensemble describes how parameter uncertainty propagates into model predictions.
+- Observations may constrain the plausible parameter space without identifying one unique parameter set.

@@ -1,0 +1,68 @@
+[
+  {
+    "question": "1. Which statement best describes the Morris method? (Select ONE correct answer.)",
+    "options": {
+      "It is a global screening method that explores parameter effects across predefined ranges.": true,
+      "It is a local method that perturbs parameters only around one calibrated parameter set.": false,
+      "It directly decomposes the full output variance into exact variance fractions.": false,
+      "It requires only one model realization per parameter.": false
+    },
+    "success": "✅ Correct. Morris is a global screening and ranking method.",
+    "error": "❌ Not quite. Morris explores parameter effects globally across predefined parameter ranges."
+  },
+  {
+    "question": "2. Along one Morris trajectory with n parameters, how many model evaluations are required? (Select ONE correct answer.)",
+    "options": {
+      "n": false,
+      "n + 1": true,
+      "2n": false,
+      "r(n + 1)": false
+    },
+    "success": "✅ Correct. One starting point plus one change for each of the n parameters gives n + 1 evaluations per trajectory.",
+    "error": "❌ Not quite. Each trajectory contains one starting point and one additional evaluation for each parameter."
+  },
+  {
+    "question": "3. What does the mean absolute elementary effect μ* mainly tell us? (Select ONE correct answer.)",
+    "options": {
+      "The overall importance of a parameter for the analysed model output.": true,
+      "Whether the model response is necessarily monotonic.": false,
+      "The number of Morris trajectories.": false,
+      "The exact fraction of output variance caused by the parameter.": false
+    },
+    "success": "✅ Correct. Larger μ* indicates a stronger overall parameter influence.",
+    "error": "❌ Not quite. μ* is primarily used to rank the overall magnitude of parameter influence."
+  },
+  {
+    "question": "4. What does a large σ indicate in a Morris analysis? (Select ALL correct answers.)",
+    "options": {
+      "The elementary effects vary strongly across the parameter space.": true,
+      "Nonlinearity and/or parameter interactions may be important.": true,
+      "The parameter must have the largest μ*.": false,
+      "The parameter is necessarily linear and additive.": false
+    },
+    "success": "✅ Correct. Large σ means that the elementary effects change strongly across the sampled parameter space.",
+    "error": "❌ Not quite. Think about σ as the variability of the elementary effects, not their overall magnitude."
+  },
+  {
+    "question": "5. Which interpretation of σ/μ* is correct? (Select ALL correct answers.)",
+    "options": {
+      "σ/μ* ≈ 0 is associated with an approximately linear and additive response.": true,
+      "0 < σ/μ* < 0.5 can still correspond to a nonlinear but predominantly monotonic response.": true,
+      "σ/μ* > 0.5 provides increasing evidence of non-monotonic behaviour.": true,
+      "Any σ/μ* > 0 means that the parameter has no influence.": false
+    },
+    "success": "✅ Correct. The ratio helps distinguish nearly linear, monotonic and increasingly non-monotonic response regimes.",
+    "error": "❌ Not quite. Revisit the reference lines in the μ*–σ plot."
+  },
+  {
+    "question": "6. In the synthetic example used in this tutorial, which parameter behaviour is intended? (Select ALL correct answers.)",
+    "options": {
+      "x1 is nonlinear but monotonic.": true,
+      "x2 is linear and additive.": true,
+      "x3 is strongly nonlinear and non-monotonic.": true,
+      "All three parameters are linear and additive.": false
+    },
+    "success": "✅ Correct. The synthetic model was designed so the three parameters illustrate distinct Morris response behaviours.",
+    "error": "❌ Not quite. Compare the synthetic equation with the μ*–σ interpretation shown in Step 5."
+  }
+]

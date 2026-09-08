@@ -1,0 +1,1 @@
+For learning purposes, we use the **variance-decomposition interpretation** rather than the **conditional-expectation formulation**. The detailed sampling matrices and estimator formulas are provided only as optional technical information. For the formal definitions, notation, and complete implementation of the Sobol' indices, please refer to the **Further learning material**.

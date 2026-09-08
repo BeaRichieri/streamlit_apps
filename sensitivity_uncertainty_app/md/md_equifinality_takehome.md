@@ -1,0 +1,5 @@
+- **Equifinality** means that different parameter combinations can produce similarly acceptable model responses.
+- A high model-performance value does not by itself prove that the parameter values are uniquely identified.
+- Parameters can compensate for one another, producing ridges or extended high-performance regions in parameter space.
+- A single best parameter set can therefore hide important parameter uncertainty.
+- This motivates ensemble-based methods such as **GLUE**, which retain and analyse multiple plausible parameter sets.

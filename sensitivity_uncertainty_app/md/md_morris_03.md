@@ -1,0 +1,4 @@
+- Morris explores the parameter ranges globally using one-at-a-time trajectories.
+- $\mu^*$ summarizes the overall magnitude of a parameter effect.
+- $\sigma$ summarizes how strongly that effect changes across the parameter space.
+- Morris is particularly useful as an efficient screening method before more expensive analyses.

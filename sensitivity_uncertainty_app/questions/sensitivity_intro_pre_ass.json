@@ -1,0 +1,40 @@
+[
+  {
+    "question": "In a forward model run, which quantity is normally computed from specified inputs, model structure, and parameter values?",
+    "options": {
+      "The simulated model response": true,
+      "The unique true parameter set": false,
+      "Only the measurement error": false
+    },
+    "success": "✅ Correct. A forward run calculates the model response for specified inputs and parameters.",
+    "error": "❌ Not quite. Think about the direction from inputs and parameters through the model to simulated output."
+  },
+  {
+    "question": "Which statement best describes sensitivity analysis?",
+    "options": {
+      "It investigates how changes in inputs or parameters affect a selected model response": true,
+      "It always finds the single best parameter set": false,
+      "It removes all model uncertainty": false
+    },
+    "success": "✅ Correct. Sensitivity analysis links variation in inputs or parameters to variation in a chosen response.",
+    "error": "❌ Not quite. Sensitivity analysis is about influence on a selected response, not about eliminating uncertainty."
+  },
+  {
+    "question": "Can a local sensitivity test automatically reveal all parameter interactions across the full parameter space?",
+    "options": {
+      "Yes": false,
+      "No": true
+    },
+    "success": "✅ Correct. A local sensitivity test is centred around a reference point and can miss global behaviour and interactions.",
+    "error": "❌ Not quite. Consider what is explored when only one parameter is perturbed near one reference parameter set."
+  },
+  {
+    "question": "Is it possible for different parameter sets to produce similarly acceptable hydrological simulations?",
+    "options": {
+      "Yes": true,
+      "No": false
+    },
+    "success": "✅ Correct. This non-uniqueness is closely related to the concept of equifinality.",
+    "error": "❌ Not quite. Hydrological inverse problems are often non-unique."
+  }
+]

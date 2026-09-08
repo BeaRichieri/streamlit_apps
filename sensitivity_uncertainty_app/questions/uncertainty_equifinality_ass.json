@@ -1,0 +1,46 @@
+[
+  {
+    "question": "What does equifinality mean in model calibration?",
+    "options": {
+      "Different parameter combinations can produce similarly good model responses.": true,
+      "Every parameter has exactly the same sensitivity.": false,
+      "There is always one unique parameter set that reproduces the observations.": false,
+      "All model simulations have identical output.": false
+    },
+    "success": "✅ Correct. Equifinality means that different parameter combinations can give similarly acceptable model responses.",
+    "error": "❌ Not quite. Focus on whether a good model response must correspond to one unique parameter combination."
+  },
+  {
+    "question": "If two very different parameter sets both have KGE values close to 1, what can we conclude?",
+    "options": {
+      "Both parameter sets must be physically correct.": false,
+      "The observations do not uniquely distinguish between these parameter combinations.": true,
+      "The model contains no parameter uncertainty.": false,
+      "The KGE has been calculated incorrectly.": false
+    },
+    "success": "✅ Correct. Similar high performance means the available observations may not uniquely identify the parameters.",
+    "error": "❌ Not quite. Good fit alone does not demonstrate unique parameter identification."
+  },
+  {
+    "question": "What does an elongated high-performance ridge in the k-b landscape suggest?",
+    "options": {
+      "The two parameters can partly compensate for one another.": true,
+      "Only one parameter combination gives acceptable performance.": false,
+      "The model output is independent of both parameters.": false,
+      "Increasing the sample size will automatically remove parameter uncertainty.": false
+    },
+    "success": "✅ Correct. A ridge indicates that changes in one parameter can be offset by changes in another.",
+    "error": "❌ Not quite. Think about why many different points along the ridge can have similar performance."
+  },
+  {
+    "question": "Why does equifinality motivate an ensemble-based method such as GLUE?",
+    "options": {
+      "Because GLUE keeps only the single best parameter set.": false,
+      "Because multiple plausible parameter sets can be retained and used to represent parameter and predictive uncertainty.": true,
+      "Because GLUE removes the need for observations.": false,
+      "Because all sampled parameter sets are automatically accepted.": false
+    },
+    "success": "✅ Correct. GLUE provides a framework for retaining and analysing multiple plausible parameter sets.",
+    "error": "❌ Not quite. The key connection is that equifinality leaves more than one plausible parameter solution."
+  }
+]
