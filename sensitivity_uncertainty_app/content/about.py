@@ -49,7 +49,7 @@ st.subheader("Description", divider="blue")
 st.markdown(load_md(MD_DIR, "md_about_01.md", LANGUAGE))
 
 st.subheader("Development", divider="blue")
-st.markdown(load_md(MD_DIR, "md_about_02.md", LANGUAGE))
+
 
 st.markdown("---")
 

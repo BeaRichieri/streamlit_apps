@@ -3,5 +3,5 @@ The module **Introduction to sensitivity analysis and uncertainty analysis** con
 - local sensitivity analysis;
 - the Morris screening method;
 - Sobol' variance-based sensitivity analysis;
-- Monte Carlo parameter-uncertainty propagation;
+- uncertainty analysis and equifinality;
 - GLUE — Generalised Likelihood Uncertainty Estimation.
