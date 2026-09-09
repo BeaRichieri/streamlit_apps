@@ -54,8 +54,7 @@ st.markdown(load_md(MD_DIR, "md_about_02.md", LANGUAGE))
 st.markdown("---")
 
 columns_lic = st.columns((1, 1, 1))
-with columns_lic[0]:
-    st.image(str(IMAGE_DIR / "eurokarst2026_black.png"))
+
 with columns_lic[2]:
     st.image(str(IMAGE_DIR / "fau-logo.jpg"))
 
