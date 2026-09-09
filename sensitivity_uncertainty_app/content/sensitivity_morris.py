@@ -32,17 +32,22 @@ institution_list = [
 ]
 institution_text = " | ".join(institution_list)
 
-
 # -----------------------------------------------------------------------------
 # Fixed language and file locations
 # -----------------------------------------------------------------------------
 LANGUAGE = "en"
-MD_DIR = Path("md")
-PRE_ASSESSMENT_FILE = QUESTIONS_DIR / "sensitivity_intro_pre_ass.json"
-MORRIS_ASSESSMENT_FILE = QUESTIONS_DIR / "sensitivity_morris_ass.json"
+
+BASE_DIR = st.session_state.BASE_DIR
+CONTENT_DIR = st.session_state.CONTENT_DIR
+ASSETS_DIR = st.session_state.ASSETS_DIR
+IMAGE_DIR = st.session_state.IMAGE_DIR
+MD_DIR = st.session_state.MD_DIR
+QUESTIONS_DIR = st.session_state.QUESTIONS_DIR
 
 st.session_state.language = LANGUAGE
 
+PRE_ASSESSMENT_FILE = QUESTIONS_DIR / "sensitivity_intro_pre_ass.json"
+MORRIS_ASSESSMENT_FILE = QUESTIONS_DIR / "sensitivity_morris_ass.json"
 
 # -----------------------------------------------------------------------------
 # Assessment renderer: established iNUX / streamlit-book JSON structure

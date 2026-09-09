@@ -33,16 +33,22 @@ institution_list = [
 ]
 institution_text = " | ".join(institution_list)
 
-
 # -----------------------------------------------------------------------------
 # Fixed language and file locations
 # -----------------------------------------------------------------------------
 LANGUAGE = "en"
-MD_DIR = Path("md")
-ASSESSMENT_FILE = QUESTIONS_DIR / "parameter_uncertainty_ass.json"
+
+BASE_DIR = st.session_state.BASE_DIR
+CONTENT_DIR = st.session_state.CONTENT_DIR
+ASSETS_DIR = st.session_state.ASSETS_DIR
+IMAGE_DIR = st.session_state.IMAGE_DIR
+MD_DIR = st.session_state.MD_DIR
+QUESTIONS_DIR = st.session_state.QUESTIONS_DIR
 
 st.session_state.language = LANGUAGE
 
+
+ASSESSMENT_FILE = QUESTIONS_DIR / "parameter_uncertainty_ass.json"
 
 # -----------------------------------------------------------------------------
 # Assessment renderer
