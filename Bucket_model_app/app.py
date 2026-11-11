@@ -14,20 +14,13 @@ def _navigate_to(path: str):
 # -----------------------------------------------------------------------------
 # Application directories
 # -----------------------------------------------------------------------------
-if "directories_initialized" not in st.session_state:
-    BASE_DIR = Path("LuKARS_app")
-
-    # For local use with an absolute path, replace the line above with:
-    #BASE_DIR = Path("C:/Users/beatr/Documents/Eurokarst2026/Course/LuKARS_Multipage_App")
-
-    st.session_state.BASE_DIR = BASE_DIR
-    st.session_state.CONTENT_DIR = BASE_DIR / "content"
-    st.session_state.ASSETS_DIR = BASE_DIR / "assets"
-    st.session_state.IMAGE_DIR = BASE_DIR / "assets" / "images"
-    st.session_state.MD_DIR = BASE_DIR / "md"
-    st.session_state.QUESTIONS_DIR = BASE_DIR / "questions"
-
-    st.session_state.directories_initialized = True
+BASE_DIR = Path(__file__).resolve().parent
+st.session_state.BASE_DIR = BASE_DIR
+st.session_state.CONTENT_DIR = BASE_DIR / "content"
+st.session_state.ASSETS_DIR = BASE_DIR / "assets"
+st.session_state.IMAGE_DIR = BASE_DIR / "assets" / "images"
+st.session_state.MD_DIR = BASE_DIR / "md"
+st.session_state.QUESTIONS_DIR = BASE_DIR / "questions"
 
 
 BASE_DIR = st.session_state.BASE_DIR
@@ -38,7 +31,6 @@ MD_DIR = st.session_state.MD_DIR
 QUESTIONS_DIR = st.session_state.QUESTIONS_DIR
 
 DEFAULT_START_PAGE = CONTENT_DIR / "lumped_models.py"
-BAGET_PAGE = CONTENT_DIR / "Baget.py"  # for live plots
 
 # --- MUST be first: layout setup wide / centered ---
 if "layout_choice" not in st.session_state:
@@ -99,44 +91,6 @@ if _lumped_tutorial in {"steady", "unsteady"}:
 
 st.sidebar.markdown("# :rainbow[Karst Flow Conceptual Modelling]")
 
-# -----------------------------------------------------------------------------
-# Live companion routing
-# -----------------------------------------------------------------------------
-_live_plot = (
-    st.query_params.get("live_plot", "")
-    if hasattr(st, "query_params")
-    else ""
-)
-
-_live_id = (
-    st.query_params.get("live_id", "")
-    if hasattr(st, "query_params")
-    else ""
-)
-
-_tutorial_exercise = (
-    st.query_params.get("tutorial_exercise", "")
-    if hasattr(st, "query_params")
-    else ""
-)
-
-_route_to_baget = (
-    (
-        _live_plot in {"discharge", "fluxes", "storages"}
-        and _live_id
-    )
-    or _tutorial_exercise in {"1", "2", "3", "4", "5"}
-)
-
-if _route_to_baget:
-    if os.path.exists(BAGET_PAGE):
-        with open(BAGET_PAGE, "r", encoding="utf-8") as f:
-            exec(f.read(), globals())
-    else:
-        st.error(f"❌ File not found: `{BAGET_PAGE}`")
-
-    st.stop()
-
 # --- CSS Styling ---
 st.markdown(
     """
@@ -192,20 +146,16 @@ st.markdown(
 )
 # --- Flat page definitions ---
 pages = {
-    #"Welcome": CONTENT_DIR / "start.py",
-    #"💦 Introduction to karst": CONTENT_DIR / "intro.py",
     "📦 Lumped conceptual models": CONTENT_DIR / "lumped_models.py",
-    #"📍 Overview": CONTENT_DIR / "LuKARS_overview.py",
     "📖 Model description": CONTENT_DIR / "model_description.py",
     "🧪 Synthetic experiment": CONTENT_DIR / "synthetic_case.py",
-    #"🪨 Kerschbaum case study": CONTENT_DIR / "Kerschbaum.py",
-    #"⛰️ Baget case study": BAGET_PAGE,
-    #"📁 Upload your own data": CONTENT_DIR / "own_data.py",
-    #"ℹ️ About": CONTENT_DIR / "about.py",
 }
 
 # --- State tracking ---
-if "selected_path" not in st.session_state:
+if (
+    "selected_path" not in st.session_state
+    or st.session_state.selected_path not in pages.values()
+):
     st.session_state.selected_path = DEFAULT_START_PAGE
 if "prev_path" not in st.session_state:
     st.session_state.prev_path = st.session_state.selected_path
@@ -215,19 +165,8 @@ if "scroll_to_top" not in st.session_state:
 # Space before the first button
 st.sidebar.markdown("<div style='margin-top: 2.0rem;'></div>", unsafe_allow_html=True)
 
-# --- Overview and About buttons (at top)
-#if st.sidebar.button("Welcome", key="btn_overview"):
-   # st.session_state.selected_path = DEFAULT_START_PAGE
-    #st.rerun()   
-   # _navigate_to(DEFAULT_START_PAGE)
-
 # --- Sidebar navigation ---
 for index, (label, path) in enumerate(pages.items()):
-
-    if "💦️ Introduction to karst" in label:
-        st.sidebar.markdown(
-            "#### :blue[Choose from the topics below]"
-        )
 
     is_selected = st.session_state.selected_path == path
     clean_label = label.strip()
@@ -246,10 +185,6 @@ for index, (label, path) in enumerate(pages.items()):
     if "📦 Lumped conceptual models" in label:
         st.sidebar.markdown("**LuKARS Flow Model**")
 
-
-    #if "🧮 Morris and GLUE application" in label:
-     #   st.sidebar.markdown("**Additional Information**")
-        
 # --- Run selected page ---
 if st.session_state.selected_path:
     path = st.session_state.selected_path

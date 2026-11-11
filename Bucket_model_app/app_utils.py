@@ -1,28 +1,5 @@
 from pathlib import Path
-import re
 import streamlit as st
-import numpy as np
-
-# Make docs/ relative to THIS file, not the working directory
-DOCS_DIR = (Path(__file__).parent / "docs").resolve()
-DOCS_DIR.mkdir(parents=True, exist_ok=True)
-
-ALLOWED = re.compile(r"^[A-Za-z0-9_\-]+\.md$")
-
-def read_md(doc_name: str) -> str:
-    if not doc_name or not ALLOWED.match(doc_name):
-        return f"**Invalid document name:** `{doc_name}`"
-    p = (DOCS_DIR / doc_name).resolve()
-    try:
-        if DOCS_DIR not in p.parents:
-            return f"**Access denied:** `{doc_name}`"
-        if not p.exists() or not p.is_file():
-            return f"**Document not found:** `{doc_name}`"
-        return p.read_text(encoding="utf-8")
-    except Exception as e:
-        return f"**Error reading `{doc_name}`:** {e}"
-
-# RENDER ASSESSMENTS
 
 def flip_assessment(section_id: str):
     """Flip the boolean flag for a given section_id."""
@@ -73,52 +50,6 @@ def render_toggle_container(
         if st.session_state[state_key]:
             content_fn()
             
-# LOG SLIDER
-
-def prep_log_slider(default_val: float, log_min: float, log_max: float, step: float = 0.01, digits: int = 2):
-    """
-    Prepares labels and default for a log-scale select_slider.
-
-    Returns:
-    --------
-    labels : list of str
-        Formatted string labels in scientific notation.
-    default_label : str
-        Closest label to the given default_val.
-    """
-    # --- Generate value list and labels
-    log_values = np.arange(log_min, log_max + step, step)
-    values = 10 ** log_values
-    fmt = f"{{0:.{digits}e}}"
-    labels = [fmt.format(v) for v in values]
-
-    # --- Find closest label for default
-    idx_closest = np.abs(values - default_val).argmin()
-    default_label = labels[idx_closest]
-
-    return labels, default_label
-    
-def get_label(val: float, labels: list[str]) -> str:
-    """Given a float value and a list of scientific notation labels, return the closest label."""
-    label_vals = [float(l) for l in labels]
-    idx = np.abs(np.array(label_vals) - val).argmin()
-    return labels[idx]
-
-def get_step(val: float) -> float:
-    """Return a step that modifies the first digit after the decimal point in scientific notation."""
-    if val == 0:
-        return 1e-8  # fallback
-    exponent = int(np.floor(np.log10(abs(val))))
-    return 10 ** (exponent - 1)
-    
-#@st.cache_data
-#def load_md(MD_DIR, filename, language):
-#    path = Path(MD_DIR) / language / filename
-#    return path.read_text(encoding="utf-8")
-#    
-#from pathlib import Path
-#import streamlit as st
-
 
 @st.cache_data
 def load_md(MD_DIR, filename, language="en"):
@@ -141,16 +72,4 @@ def load_md(MD_DIR, filename, language="en"):
 
     default = md_dir / filename
     return default.read_text(encoding="utf-8")
-    
-def load_css(CSS_DIR, filename):
-    path = CSS_DIR / filename
-    css = path.read_text(encoding="utf-8")
-    st.markdown(f"<style>{css}</style>", unsafe_allow_html=True)
-    
-def ui_text(en, **translations):
-    """
-    Return the UI text in the selected language.
-    Falls back to English if no translation is available.
-    """
-    return translations.get(st.session_state.language, en)
     
