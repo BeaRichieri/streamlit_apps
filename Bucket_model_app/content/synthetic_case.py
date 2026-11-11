@@ -1,6 +1,11 @@
 from __future__ import annotations
 
 import importlib.util
+import json
+import sys
+import threading
+import time
+import uuid
 from pathlib import Path
 
 import numpy as np
@@ -67,6 +72,153 @@ SIMPLE_RESERVOIR_COLOR = "#6B6B6B"
 E_COLOR = "#D62728"
 M_COLOR = "#6F6F6F"
 C_COLOR = "#111111"
+
+
+# -----------------------------------------------------------------------------
+# Live companion plots: match the original application's separate-tab behavior
+# -----------------------------------------------------------------------------
+SYNTHETIC_LIVE_PLOT_LABELS = {
+    "spring": "Spring response",
+    "fluxes": "Internal LuKARS fluxes",
+    "storages": "Internal LuKARS storages",
+}
+
+
+@st.cache_resource
+def get_synthetic_live_plot_store():
+    """Thread-safe plot snapshots accessible across browser tabs/sessions."""
+    return {"lock": threading.RLock(), "plots": {}}
+
+
+def get_synthetic_live_id() -> str:
+    """Stable identifier shared with this page's companion plotting tabs."""
+    if "synthetic_live_id" not in st.session_state:
+        st.session_state.synthetic_live_id = uuid.uuid4().hex
+    return st.session_state.synthetic_live_id
+
+
+def publish_synthetic_live_plot(plot_key: str, figure: go.Figure) -> None:
+    """Publish this page's current graph whenever controls cause a rerun."""
+    if plot_key not in SYNTHETIC_LIVE_PLOT_LABELS:
+        return
+
+    store = get_synthetic_live_plot_store()
+    now = time.time()
+    with store["lock"]:
+        # Remove abandoned sessions to avoid an unbounded server-side cache.
+        cutoff = now - 6 * 60 * 60
+        stale_keys = [
+            key for key, snapshot in store["plots"].items()
+            if snapshot.get("updated", 0.0) < cutoff
+        ]
+        for key in stale_keys:
+            del store["plots"][key]
+
+        store["plots"][(get_synthetic_live_id(), plot_key)] = {
+            "figure_json": figure.to_json(),
+            "updated": now,
+        }
+
+
+def read_synthetic_live_plot(live_id: str, plot_key: str):
+    """Retrieve one graph produced by the original Synthetic experiment tab."""
+    store = get_synthetic_live_plot_store()
+    with store["lock"]:
+        snapshot = store["plots"].get((live_id, plot_key))
+        return None if snapshot is None else dict(snapshot)
+
+
+def render_synthetic_live_plot_button(plot_key: str) -> None:
+    """Open a synchronizing plot-only view, like the original Baget plots."""
+    _, button_col = st.columns([4.0, 1.25])
+    with button_col:
+        st.link_button(
+            "↗ Open live plot",
+            f"./?synthetic_live_plot={plot_key}&synthetic_live_id={get_synthetic_live_id()}",
+            use_container_width=True,
+            help=(
+                "Open this graph in a separate browser tab. Keep the Synthetic "
+                "experiment page open and change the sliders there; this graph "
+                "updates automatically."
+            ),
+        )
+
+
+def render_synthetic_live_companion() -> bool:
+    """Show just the requested live chart when opened in a new browser tab."""
+    if not hasattr(st, "query_params"):
+        return False
+
+    plot_key = st.query_params.get("synthetic_live_plot", "")
+    live_id = st.query_params.get("synthetic_live_id", "")
+    if plot_key not in SYNTHETIC_LIVE_PLOT_LABELS or not live_id:
+        return False
+
+    st.markdown(
+        """
+        <style>
+        section[data-testid="stSidebar"], [data-testid="stHeader"] {
+            display: none !important;
+        }
+        .block-container {
+            max-width: 100% !important;
+            padding-top: 3.5rem !important;
+            padding-left: 1.4rem !important;
+            padding-right: 1.4rem !important;
+            padding-bottom: 1.0rem !important;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
+
+    st.subheader(f":blue[{SYNTHETIC_LIVE_PLOT_LABELS[plot_key]}]", divider="blue")
+    st.caption(
+        "Live companion view · Keep the original Synthetic experiment page open. "
+        "This graph refreshes automatically when its parameters change."
+    )
+
+    if not hasattr(st, "fragment"):
+        st.error("The live companion view requires Streamlit with st.fragment support.")
+        return True
+
+    @st.fragment(run_every="1s")
+    def synthetic_live_plot_fragment():
+        snapshot = read_synthetic_live_plot(live_id, plot_key)
+        if snapshot is None:
+            st.info(
+                "Waiting for the graph from the Synthetic experiment page. "
+                "Keep the original page open and change any parameter once."
+            )
+            return
+
+        try:
+            live_figure = go.Figure(json.loads(snapshot["figure_json"]))
+        except Exception as exc:
+            st.error("The companion graph could not be reconstructed.")
+            st.exception(exc)
+            return
+
+        # Preserve zoom/pan and legend toggles between automatic refreshes.
+        live_figure.update_layout(
+            height=700,
+            uirevision=f"synthetic-live-{live_id}-{plot_key}",
+        )
+        st.plotly_chart(
+            live_figure,
+            use_container_width=True,
+            key=f"synthetic_live_chart_{plot_key}",
+            config={"displaylogo": False, "scrollZoom": True},
+        )
+        st.caption("Automatic refresh: approximately every 1 second.")
+
+    synthetic_live_plot_fragment()
+    return True
+
+
+# In the separate tab, stop before running the model or rendering any controls.
+if render_synthetic_live_companion():
+    st.stop()
 
 
 # -----------------------------------------------------------------------------
@@ -143,6 +295,9 @@ def load_lukars_model(model_path: str):
         raise ImportError(f"Could not load LuKARS model module from: {path}")
 
     module = importlib.util.module_from_spec(module_spec)
+    # Register this dynamically loaded module so Numba's disk cache can
+    # resolve the compiled functions across Streamlit processes/restarts.
+    sys.modules[module_spec.name] = module
     module_spec.loader.exec_module(module)
 
     if not hasattr(module, "run_model"):
@@ -1079,13 +1234,15 @@ st.subheader(
 
 st.markdown(load_md(MD_DIR, "md_synthetic_07.md", LANGUAGE))
 
+spring_figure = spring_response_figure(
+    time_hours,
+    precipitation,
+    q_lukars,
+    simple_discharge,
+)
+publish_synthetic_live_plot("spring", spring_figure)
 st.plotly_chart(
-    spring_response_figure(
-        time_hours,
-        precipitation,
-        q_lukars,
-        simple_discharge,
-    ),
+    spring_figure,
     use_container_width=True,
     key="synthetic_spring_response_plot",
     config={
@@ -1093,6 +1250,8 @@ st.plotly_chart(
         "scrollZoom": True,
     },
 )
+
+render_synthetic_live_plot_button("spring")
 
 
 # -----------------------------------------------------------------------------
@@ -1105,12 +1264,14 @@ st.subheader(
 
 st.markdown(load_md(MD_DIR, "md_synthetic_08.md", LANGUAGE))
 
+flux_figure = internal_flux_figure(
+    time_hours,
+    run_up,
+    run_bot,
+)
+publish_synthetic_live_plot("fluxes", flux_figure)
 st.plotly_chart(
-    internal_flux_figure(
-        time_hours,
-        run_up,
-        run_bot,
-    ),
+    flux_figure,
     use_container_width=True,
     key="synthetic_internal_flux_plot",
     config={
@@ -1118,6 +1279,8 @@ st.plotly_chart(
         "scrollZoom": True,
     },
 )
+
+render_synthetic_live_plot_button("fluxes")
 
 
 # -----------------------------------------------------------------------------
@@ -1130,12 +1293,14 @@ st.subheader(
 
 st.markdown(load_md(MD_DIR, "md_synthetic_09.md", LANGUAGE))
 
+storage_figure_live = storage_figure(
+    time_hours,
+    run_up,
+    run_bot,
+)
+publish_synthetic_live_plot("storages", storage_figure_live)
 st.plotly_chart(
-    storage_figure(
-        time_hours,
-        run_up,
-        run_bot,
-    ),
+    storage_figure_live,
     use_container_width=True,
     key="synthetic_storage_plot",
     config={
@@ -1143,6 +1308,8 @@ st.plotly_chart(
         "scrollZoom": True,
     },
 )
+
+render_synthetic_live_plot_button("storages")
 
 
 # -----------------------------------------------------------------------------

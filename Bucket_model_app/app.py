@@ -89,6 +89,29 @@ if _lumped_tutorial in {"steady", "unsteady"}:
 
     st.stop()
 
+# -----------------------------------------------------------------------------
+# Live companion plots for the synthetic experiment (separate browser tab)
+# -----------------------------------------------------------------------------
+_synthetic_live_plot = (
+    st.query_params.get("synthetic_live_plot", "")
+    if hasattr(st, "query_params")
+    else ""
+)
+_synthetic_live_id = (
+    st.query_params.get("synthetic_live_id", "")
+    if hasattr(st, "query_params")
+    else ""
+)
+
+if _synthetic_live_plot in {"spring", "fluxes", "storages"} and _synthetic_live_id:
+    synthetic_page = CONTENT_DIR / "synthetic_case.py"
+    if synthetic_page.exists():
+        with open(synthetic_page, "r", encoding="utf-8") as source:
+            exec(source.read(), globals())
+    else:
+        st.error(f"❌ File not found: `{synthetic_page}`")
+    st.stop()
+
 st.sidebar.markdown("# :rainbow[Karst Flow Conceptual Modelling]")
 
 # --- CSS Styling ---
