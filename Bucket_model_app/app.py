@@ -37,7 +37,7 @@ IMAGE_DIR = st.session_state.IMAGE_DIR
 MD_DIR = st.session_state.MD_DIR
 QUESTIONS_DIR = st.session_state.QUESTIONS_DIR
 
-DEFAULT_START_PAGE = CONTENT_DIR / "start.py"
+DEFAULT_START_PAGE = CONTENT_DIR / "lumped_models.py"
 BAGET_PAGE = CONTENT_DIR / "Baget.py"  # for live plots
 
 # --- MUST be first: layout setup wide / centered ---
