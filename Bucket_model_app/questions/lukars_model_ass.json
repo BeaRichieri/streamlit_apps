@@ -1,0 +1,90 @@
+[
+  {
+    "question": "Why is LuKARS described as a semi-distributed model? (Select ONE correct answer.)",
+    "options": {
+      "It solves a three-dimensional groundwater-flow equation in every grid cell.": false,
+      "It divides the recharge area into hydrotopes with different hydrological behaviour.": true,
+      "It represents the entire catchment with one single storage and no spatial differentiation.": false,
+      "It simulates only the karst spring and no internal compartments.": false
+    },
+    "success": "Correct. LuKARS represents spatial variability through hydrotopes while retaining a conceptual lower model structure.",
+    "error": "Not quite. Focus on how the recharge area is subdivided."
+  },
+  {
+    "question": "Which statements correctly describe hydrotopes? (Select ALL correct answers.)",
+    "options": {
+      "They are spatial response units with characteristic hydrological behaviour.": true,
+      "Each hydrotope may have its own storage and parameter values.": true,
+      "They are always identical in area and response.": false,
+      "They allow spatial variability to be represented without a complete numerical grid.": true
+    },
+    "success": "Correct. Hydrotopes are distinct response units that provide a semi-distributed representation of the recharge area.",
+    "error": "Not quite. Consider why the model uses several hydrotopes rather than one uniform recharge unit."
+  },
+  {
+    "question": "Which flux transfers water slowly from a hydrotope toward the matrix? (Select ONE correct answer.)",
+    "options": {
+      "Qis": true,
+      "Qhyd": false,
+      "QCS": false,
+      "QMC": false
+    },
+    "success": "Correct. Qis represents slow infiltration from a hydrotope toward the matrix.",
+    "error": "Not quite. Distinguish the slow hydrotope pathway from rapid flow and lower-compartment fluxes."
+  },
+  {
+    "question": "What is the role of Emin and Emax? (Select ONE correct answer.)",
+    "options": {
+      "They control activation and deactivation of rapid hydrotope flow.": true,
+      "They define the total catchment area.": false,
+      "They measure observed spring discharge.": false,
+      "They are the matrix and conduit storage values.": false
+    },
+    "success": "Correct. The two thresholds form the hysteresis mechanism controlling rapid hydrotope flow.",
+    "error": "Not quite. Think about when fast hydrotope flow becomes active and inactive."
+  },
+  {
+    "question": "Why are two different thresholds used for fast-flow activation and deactivation? (Select ONE correct answer.)",
+    "options": {
+      "To create hysteresis and prevent rapid switching around one threshold.": true,
+      "To make every hydrotope have the same area.": false,
+      "To remove the conduit compartment.": false,
+      "To ensure that model parameters are directly measurable in the field.": false
+    },
+    "success": "Correct. Separate thresholds allow activation and deactivation to occur at different storage levels.",
+    "error": "Not quite. Consider the meaning of hysteresis."
+  },
+  {
+    "question": "Which statements describe matrix-conduit exchange? (Select ALL correct answers.)",
+    "options": {
+      "The exchange direction can change.": true,
+      "It depends on the difference between matrix and conduit storage.": true,
+      "It is always directed from conduits to the matrix.": false,
+      "Its strength and nonlinearity are controlled by kMC and aMC.": true
+    },
+    "success": "Correct. Matrix-conduit exchange can be bidirectional and depends on the storage difference and exchange parameters.",
+    "error": "Not quite. Consider both the direction and the controlling parameters."
+  },
+  {
+    "question": "Which parameter most directly controls conduit drainage toward the spring? (Select ONE correct answer.)",
+    "options": {
+      "kCS": true,
+      "kis": false,
+      "Emin": false,
+      "Ai": false
+    },
+    "success": "Correct. kCS controls the conduit-to-spring drainage relationship.",
+    "error": "Not quite. Identify the parameter associated with QCS."
+  },
+  {
+    "question": "Why should internal storages and fluxes be inspected in addition to spring discharge? (Select ONE correct answer.)",
+    "options": {
+      "Different internal dynamics can sometimes produce similar spring hydrographs.": true,
+      "Spring discharge contains no information about the model output.": false,
+      "Internal variables are always directly observed in the field.": false,
+      "Performance metrics cannot be calculated for spring discharge.": false
+    },
+    "success": "Correct. Similar outlet behaviour can arise from different parameter combinations and internal process representations.",
+    "error": "Not quite. Think about equifinality and process realism."
+  }
+]

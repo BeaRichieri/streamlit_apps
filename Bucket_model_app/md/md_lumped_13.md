@@ -1,0 +1,1 @@
+Conceptual-model parameters are uncertain because they are estimated indirectly from observations. Uncertainty can also arise from measurement errors, incomplete process understanding, and simplifications in the model structure.

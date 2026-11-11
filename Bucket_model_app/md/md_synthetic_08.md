@@ -1,0 +1,1 @@
+The internal fluxes reveal how the single precipitation pulse is partitioned between the fast and slow pathways. Click directly on a legend item to hide or show a flux. A **positive $Q_{MC}$** represents matrix-to-conduit exchange; a negative value represents conduit-to-matrix exchange.

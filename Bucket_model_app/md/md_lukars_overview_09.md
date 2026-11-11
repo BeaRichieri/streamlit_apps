@@ -1,0 +1,7 @@
+- Make a prediction before modifying a parameter.
+- Change one parameter at a time during the first exploration.
+- Use short time windows to investigate individual precipitation events.
+- Compare both peak flow and recession behaviour.
+- Do not rely on a single performance metric.
+- Check whether apparently good simulations are supported by plausible internal dynamics.
+- Record parameter changes and observations during the exercises.

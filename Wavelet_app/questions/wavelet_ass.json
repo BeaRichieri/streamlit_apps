@@ -1,0 +1,46 @@
+[
+  {
+    "question": "What does the approximation component mainly represent?",
+    "options": {
+      "The smoother, lower-frequency part of the signal": true,
+      "Only random noise": false,
+      "The fastest fluctuations in the signal": false,
+      "The original signal without any transformation": false
+    },
+    "success": "\u2705 Correct. The approximation contains the smoother part retained at the selected scale.",
+    "error": "\u274c Not quite. Think about the output of the low-pass branch of the decomposition."
+  },
+  {
+    "question": "Which component usually contains the fastest resolved variability?",
+    "options": {
+      "D1": true,
+      "The coarsest approximation": false,
+      "The highest-numbered approximation": false,
+      "All components always contain exactly the same scales": false
+    },
+    "success": "\u2705 Correct. D1 is the finest-scale detail component.",
+    "error": "\u274c Not quite. Lower detail levels correspond to finer scales."
+  },
+  {
+    "question": "Why are wavelets useful for a short transient event?",
+    "options": {
+      "They retain information about when scale-dependent variability occurs": true,
+      "They remove all high-frequency behaviour automatically": false,
+      "They require the signal to be perfectly stationary": false,
+      "They convert every transient into a linear trend": false
+    },
+    "success": "\u2705 Correct. Wavelets preserve time localization as well as scale information.",
+    "error": "\u274c Not quite. Focus on the combination of time and scale localization."
+  },
+  {
+    "question": "What happens if you reconstruct the signal using only the coarse approximation?",
+    "options": {
+      "You obtain a smoother representation dominated by slow variability": true,
+      "You reproduce only the fastest noise": false,
+      "You always obtain the exact original signal": false,
+      "The reconstruction is mathematically impossible": false
+    },
+    "success": "\u2705 Correct. Keeping only the approximation removes the finer-scale detail components.",
+    "error": "\u274c Not quite. Think about which scales are retained in the approximation."
+  }
+]

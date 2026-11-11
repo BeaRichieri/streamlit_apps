@@ -1,0 +1,1 @@
+Conceptual-model parameters are effective representations of catchment behaviour. Although some parameters may have a physical interpretation, they generally cannot be measured directly in the field.

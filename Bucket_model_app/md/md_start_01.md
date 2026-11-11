@@ -1,0 +1,5 @@
+This app provides a brief introduction to **karst systems** and **hydrological modelling approaches**, with a focus on **conceptual flow models**. It introduces the **semi-distributed LuKARS flow model** and guides users from the general characteristics of karst aquifers and lumped conceptual modelling to the LuKARS model structure and its application to the **Baget karst spring in France**.
+
+The aim is to develop an intuitive understanding of how conceptual models translate our knowledge of karst processes into mathematical representations, and how different model components and parameters control **storage, flow pathways, and spring discharge**. Through the interactive exercises, users can explore model behaviour and directly relate changes in model parameters to the simulated hydrological response.
+
+Each page of the app consists of a short introduction to the topic, followed by a **hands-on interactive exercise**, a **self-check assessment**, **take-home messages**, and **suggested literature** for further learning.

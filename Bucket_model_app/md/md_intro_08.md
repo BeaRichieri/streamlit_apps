@@ -1,0 +1,3 @@
+The process through which soluble rocks are progressively dissolved and transformed into a karst system is called **karstification**.
+
+Karstification commonly begins when carbon-dioxide-rich water enters narrow fractures in carbonate rock. Near the fracture entrance, dissolution may initially be rapid. As the water approaches chemical equilibrium with the rock, however, its capacity for further dissolution decreases.

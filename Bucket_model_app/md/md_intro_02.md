@@ -1,0 +1,1 @@
+Karst systems cover approximately **10–15% of the Earth's continental land surface** and around **35% of Europe's continental area**. They are crucial freshwater resources and provide drinking water to nearly one quarter of the world's population.

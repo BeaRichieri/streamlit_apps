@@ -1,0 +1,1 @@
+A conceptual hydrological model represents a catchment as a simplified network of **storage compartments** and **transfer functions**.

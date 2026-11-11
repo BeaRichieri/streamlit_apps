@@ -1,0 +1,1 @@
+For hydrological analysis and modelling, karst systems are often conceptualised using three main compartments: the **epikarst**, the **matrix and fracture domain**, and the **conduit network**.

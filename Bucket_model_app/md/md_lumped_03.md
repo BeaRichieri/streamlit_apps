@@ -1,0 +1,1 @@
+Distributed models explicitly represent the **spatial variability** of the hydrological system.

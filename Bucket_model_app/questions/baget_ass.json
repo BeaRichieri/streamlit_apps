@@ -1,0 +1,90 @@
+[
+  {
+    "question": "What is the expected general effect of increasing kCS? (Select ONE correct answer.)",
+    "options": {
+      "The conduit drains more rapidly toward the spring.": true,
+      "The conduit drains more slowly toward the spring.": false,
+      "Slow hydrotope infiltration becomes zero.": false,
+      "The hydrotope area increases automatically.": false
+    },
+    "success": "Correct. A larger kCS generally increases conduit drainage toward the spring.",
+    "error": "Not quite. Focus on the role of kCS in the conduit-to-spring flux."
+  },
+  {
+    "question": "How should missing QobsS values be interpreted? (Select ONE correct answer.)",
+    "options": {
+      "As measured zero discharge.": false,
+      "As unavailable discharge observations.": true,
+      "As zero precipitation.": false,
+      "As model failure.": false
+    },
+    "success": "Correct. Missing QobsS values are unavailable observations and are excluded from metric calculations.",
+    "error": "Not quite. A missing observation is not equivalent to a measured zero."
+  },
+  {
+    "question": "Which outputs should be inspected when evaluating a parameter change? (Select ALL correct answers.)",
+    "options": {
+      "Observed and simulated spring discharge.": true,
+      "Relevant internal fluxes.": true,
+      "Relevant model storages.": true,
+      "Only one performance metric.": false
+    },
+    "success": "Correct. A process-based evaluation combines the hydrograph, internal fluxes, storages, and numerical metrics.",
+    "error": "Not quite. Avoid evaluating parameter changes using only one summary number."
+  },
+  {
+    "question": "What is the expected effect of increasing Emax for one hydrotope? (Select ONE correct answer.)",
+    "options": {
+      "Rapid hydrotope flow generally activates at a higher storage level.": true,
+      "Rapid hydrotope flow always activates earlier.": false,
+      "Matrix-conduit exchange is removed.": false,
+      "The observed discharge time series changes.": false
+    },
+    "success": "Correct. A higher Emax generally delays activation until greater hydrotope storage is reached.",
+    "error": "Not quite. Think about the upper storage threshold controlling fast-flow activation."
+  },
+  {
+    "question": "What does increasing kis generally promote? (Select ONE correct answer.)",
+    "options": {
+      "Greater slow infiltration from the hydrotope toward the matrix.": true,
+      "A larger catchment area.": false,
+      "Removal of precipitation from the input data.": false,
+      "Direct modification of observed discharge.": false
+    },
+    "success": "Correct. kis controls the slow transfer from hydrotope storage toward the matrix.",
+    "error": "Not quite. Identify the pathway represented by Qis."
+  },
+  {
+    "question": "Why can two parameter sets with similar NSE values still represent different hydrological behaviour? (Select ONE correct answer.)",
+    "options": {
+      "They may produce similar spring hydrographs through different internal storages and fluxes.": true,
+      "NSE directly measures every internal model state.": false,
+      "The model contains no internal compartments.": false,
+      "Observed discharge is replaced by simulated discharge.": false
+    },
+    "success": "Correct. Similar outlet behaviour can arise from different internal dynamics, which is related to equifinality.",
+    "error": "Not quite. Consider what a discharge metric can and cannot reveal about internal processes."
+  },
+  {
+    "question": "Which statement best describes QMC? (Select ONE correct answer.)",
+    "options": {
+      "It represents exchange between matrix and conduit storage.": true,
+      "It is the precipitation input.": false,
+      "It is the area fraction of a hydrotope.": false,
+      "It is observed spring discharge.": false
+    },
+    "success": "Correct. QMC is the matrix-conduit exchange flux.",
+    "error": "Not quite. Focus on the two lower compartments connected by QMC."
+  },
+  {
+    "question": "What is a good first strategy during manual calibration? (Select ONE correct answer.)",
+    "options": {
+      "Modify one parameter at a time and compare the result with a reference simulation.": true,
+      "Change all parameters simultaneously without recording the changes.": false,
+      "Use only the final NSE value and ignore hydrograph shape.": false,
+      "Replace missing observations with zero.": false
+    },
+    "success": "Correct. Controlled one-at-a-time changes help connect parameters with hydrological effects.",
+    "error": "Not quite. The first objective is to understand parameter behaviour transparently."
+  }
+]

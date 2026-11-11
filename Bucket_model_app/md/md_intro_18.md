@@ -1,0 +1,10 @@
+- Karst develops through the dissolution of soluble rocks.
+- Carbon dioxide and carbonic acid promote carbonate dissolution.
+- Karstification progressively enlarges preferential pathways and can create conduits.
+- Karst aquifers contain matrix, fracture, and conduit porosity.
+- Recharge can be diffuse or concentrated, and autogenic or allogenic.
+- The epikarst temporarily stores and redistributes recharge.
+- The matrix and fracture domain commonly provide substantial groundwater storage.
+- Conduits transmit water rapidly towards karst springs.
+- Exchange can occur between conduits and the surrounding fractured rock.
+- The coexistence of slow and fast domains creates the characteristic dual behaviour of karst aquifers.

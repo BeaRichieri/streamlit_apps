@@ -1,0 +1,90 @@
+[
+  {
+    "question": "Which factors should be considered when selecting a hydrological modelling approach? (Select ALL correct answers.)",
+    "options": {
+      "The purpose of the model.": true,
+      "The available data.": true,
+      "The current understanding of the hydrological system.": true,
+      "The requirement that every model must use a three-dimensional grid.": false
+    },
+    "success": "Correct. Model purpose, system knowledge, and data availability are central when selecting an appropriate modelling approach.",
+    "error": "Not quite. Consider what determines whether a detailed spatial representation is justified and feasible."
+  },
+  {
+    "question": "Which statements generally describe distributed hydrological models? (Select ALL correct answers.)",
+    "options": {
+      "They divide the model domain into spatial grid cells.": true,
+      "They can simulate the spatial evolution of groundwater heads.": true,
+      "They normally require no information about geology or boundary conditions.": false,
+      "They are often more computationally demanding than conceptual models.": true
+    },
+    "success": "Correct. Distributed models represent spatial variability explicitly and usually require substantial data and computational resources.",
+    "error": "Not quite. Focus on spatial discretization, data requirements, and computational demand."
+  },
+  {
+    "question": "Which statements generally describe conceptual hydrological models? (Select ALL correct answers.)",
+    "options": {
+      "They use storages and transfer functions to represent dominant processes.": true,
+      "They always provide a fully resolved three-dimensional groundwater-head field.": false,
+      "They are usually computationally efficient.": true,
+      "Their effective parameters often need to be estimated through calibration.": true
+    },
+    "success": "Correct. Conceptual models simplify the system into storages and fluxes and commonly require parameter calibration.",
+    "error": "Not quite. Think about what conceptual models simplify and how their parameters are obtained."
+  },
+  {
+    "question": "What is the main distinction between fully lumped and semi-distributed conceptual models? (Select ONE correct answer.)",
+    "options": {
+      "Fully lumped models use groundwater equations, whereas semi-distributed models do not use equations.": false,
+      "Fully lumped models treat the catchment as one spatial unit, whereas semi-distributed models divide it into response units.": true,
+      "Semi-distributed models cannot simulate spring discharge.": false,
+      "Fully lumped models always contain fewer than two parameters.": false
+    },
+    "success": "Correct. The distinction concerns the degree to which the catchment is divided into spatial response units.",
+    "error": "Not quite. Focus on how the catchment is represented spatially in each approach."
+  },
+  {
+    "question": "In the water-balance equation dS/dt = P - ET - Q, what does a positive value of dS/dt indicate? (Select ONE correct answer.)",
+    "options": {
+      "The water stored in the reservoir is increasing.": true,
+      "The reservoir has no input.": false,
+      "Discharge must be zero.": false,
+      "Evapotranspiration is greater than all water inputs and outputs combined.": false
+    },
+    "success": "Correct. A positive storage change means that the reservoir is gaining water.",
+    "error": "Not quite. Consider whether the combined inflow is greater or smaller than the combined losses."
+  },
+  {
+    "question": "What does the relationship Q = aS^b represent in a conceptual reservoir? (Select ONE correct answer.)",
+    "options": {
+      "A relationship between stored water and reservoir discharge.": true,
+      "A direct measurement of aquifer porosity.": false,
+      "The spatial coordinates of the karst spring.": false,
+      "A groundwater-flow equation solved in every grid cell.": false
+    },
+    "success": "Correct. The equation describes how discharge changes as the amount of stored water changes.",
+    "error": "Not quite. Identify the two hydrological quantities connected by the equation."
+  },
+  {
+    "question": "Why are conceptual-model parameters commonly calibrated? (Select ONE correct answer.)",
+    "options": {
+      "They are effective representations of system behaviour and usually cannot all be measured directly in the field.": true,
+      "Calibration converts a conceptual model automatically into a distributed model.": false,
+      "Calibration eliminates all uncertainty from the model.": false,
+      "The parameters are required to remain identical for every karst catchment.": false
+    },
+    "success": "Correct. Calibration estimates parameter values that are not directly observable from field measurements.",
+    "error": "Not quite. Think about the relationship between effective model parameters and field observations."
+  },
+  {
+    "question": "Why should sensitivity analysis and uncertainty quantification be considered when applying conceptual models? (Select ALL correct answers.)",
+    "options": {
+      "Several parameter combinations may reproduce the observed discharge similarly well.": true,
+      "The estimated parameters are uncertain.": true,
+      "Sensitivity analysis helps identify influential parameters and processes.": true,
+      "They guarantee that the selected model structure is a perfect representation of reality.": false
+    },
+    "success": "Correct. These analyses help identify influential controls and evaluate the consequences of uncertain parameter estimates.",
+    "error": "Not quite. Consider parameter uncertainty, equifinality, and the purpose of sensitivity analysis."
+  }
+]

@@ -1,0 +1,1 @@
+Conceptual models represent the dominant hydrological processes using interconnected **buckets and transfer functions**.
